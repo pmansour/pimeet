@@ -1,0 +1,4 @@
+[Desktop Entry]
+Type=Application
+Name=Reduce resolution
+Exec=xrandr --output HDMI-1 --mode 2560x1440
