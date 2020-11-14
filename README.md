@@ -41,9 +41,9 @@ Here's what you'll need:
    audio. A combined mic/speaker will often include some built-in noise cancellation
    to avoid echo.
 
-   We tested with the Jabra Speak 710 (*$230 on
-   [Amazon](https://www.amazon.com/gp/product/B071R7NGTD)*) and got great results.
-   The Jabra Speak 510 (*$109 on [Amazon](https://www.amazon.com/dp/B00AQUO5RI)*) should also
+   We tested with the Jabra Speak 710 (*$230* on
+   [Amazon](https://www.amazon.com/gp/product/B071R7NGTD)) and got great results.
+   The Jabra Speak 510 (*$109* on [Amazon](https://www.amazon.com/dp/B00AQUO5RI)) should also
    work fine.
 
 ### Meeting platform
