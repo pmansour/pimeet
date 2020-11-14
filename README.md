@@ -12,7 +12,7 @@ To start a meeting, just plug the RP4 into power when you arrive. Online attende
 
 Here's what you'll need:
 
-**1. Raspberry Pi 4** (*~$85*)
+1. **Raspberry Pi 4** (*~$85*)
 
    We recommend the 4GB CanaKit Basic Starter Kit with Fan, available from
    [Amazon](https://www.amazon.com/gp/product/B07VYC6S56) for $82.99.
@@ -21,19 +21,19 @@ Here's what you'll need:
    the CPU/GPU while powering peripherals and WiFi/Bluetooth. The micro-HDMI
    to HDMI cable lets you simply connect to the TV while supporting HDMI-CEC.
 
-**1. TV** (*~$80-200*)
+1. **TV** (*~$80-200*)
 
    Any TV with a HDMI input should work, but a TV that supports HDMI-CEC allows
    things like using the TV's power status to join/leave a meeting.
 
-**1. USB Webcam** (*~$50-120*)
+1. **USB Webcam** (*~$50-120*)
 
    You can get a cheap camera under $50 that will do the job, such as
    [this one](https://www.amazon.com/gp/product/B072MMH33F). However, if you
    have a larger meeting room and want better quality video, then something like
    the Logitech C920 might be desired.
 
-**1. Bluetooth speaker/mic** (*$50-200*)
+1. **Bluetooth speaker/mic** (*$50-200*)
 
    Strictly speaking, this doesn't need to support bluetooth, and it doesn't need
    to be a single device with a speaker/mic combo. However, a bluetooth device
