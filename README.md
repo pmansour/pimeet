@@ -91,7 +91,7 @@ TODO: automate these steps in `prepare-image.sh`.
 1. Download the latest Raspberry Pi OS (with Desktop and recommended software) from
    [here](https://www.raspberrypi.org/software/operating-systems/#raspberry-pi-os-32-bit).
 1. Use Etcher or `dd` to flash this image onto the microSD card.
-1. Add a [config.txt](https://www.raspberrypi.org/documentation/configuration/config-txt/README.md) file with the following settings:
+1. Add config files with the following settings:
    - WiFi: add an entry with your network's SSID and password
    - SSH: add an entry to enable ssh
 
