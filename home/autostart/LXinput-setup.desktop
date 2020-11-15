@@ -1,7 +1,0 @@
-[Desktop Entry]
-Type=Application
-Name=LXInput autostart
-Comment=Setup keyboard and mouse using settings done in LXInput
-NoDisplay=true
-Exec=sh -c 'xset m 20/10 10 r rate 500 33 b on; xinput --set-prop "pointer:Kinesis Freestyle Edge Keyboard" "libinput Accel Speed" 0.000000; xinput --set-prop "pointer:Logitech MX Master 2S" "libinput Accel Speed" 0.000000'
-NotShowIn=GNOME;KDE;XFCE;
