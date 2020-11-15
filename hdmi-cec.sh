@@ -51,8 +51,8 @@ while IFS= read -r line <&${COPROC[0]}; do
             fi
             IS_ON=0
             ;;
-        # TV directly requests recorder's vendor info.
-        # This is our cue to discover if the TV is on.
+        # TV directly requests our vendor info.
+        # This usually happens when it turns on.
         *01:8c*)
             request_tv_power_status
             ;;
