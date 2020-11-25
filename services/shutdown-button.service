@@ -11,5 +11,3 @@ ExecStart=/usr/local/bin/listen-for-shutdown.py
 
 [Install]
 WantedBy=multi-user.target
-# pkill -f /usr/local/bin/listen-for-shutdown.py
-
