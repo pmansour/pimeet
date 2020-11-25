@@ -1,0 +1,15 @@
+[Unit]
+Description=Service to support shutdown button.
+After=sysinit.target
+StartLimitIntervalSec=0
+
+[Service]
+Type=simple
+Restart=always
+RestartSec=1
+ExecStart=/usr/local/bin/listen-for-shutdown.py
+
+[Install]
+WantedBy=multi-user.target
+# pkill -f /usr/local/bin/listen-for-shutdown.py
+
