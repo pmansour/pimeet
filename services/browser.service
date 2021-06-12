@@ -1,0 +1,10 @@
+[Unit]
+Description=Chrome
+PartOf=graphical-session.target
+
+[Service]
+ExecStart=/usr/bin/chromium-browser --start-fullscreen
+Type=simple
+
+[Install]
+WantedBy=default.target
