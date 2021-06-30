@@ -1,8 +1,9 @@
 #!/bin/bash
-# Run this script on a pi to initialize system-wide settings.
-# Must be running as root (e.g. using sudo).
+# Run this script on a pi to initialize user settings for unprivileged user.
+# Must be running as default user.
 #
 # Usage (from remote machine):
-# alias run-remote='scp configure-device.sh pi@raspberrypi.local:/home/pi/ && ssh pi@raspberrypi.local sudo /bin/bash /home/pi/configure-device.sh'
+# scp configure-device-unprivileged.sh default@raspberrypi.local:/home/default/ && ssh default@raspberrypi.local sudo /bin/bash /home/default/configure-device-unprivileged.sh
 
 set -e
+
