@@ -24,3 +24,7 @@ EOF
 # Enable SSH.
 echo "Enabling SSH.."
 touch "$BOOT_DIR/ssh"
+
+# Enable hardware-acceleration
+sed "$BOOT_DIR/config.txt" -i -e "s/^dtoverlay=vc4-kms-v3d/#dtoverlay=vc4-kms-v3d/g"
+sed "$BOOT_DIR/config.txt" -i -e "s/^#dtoverlay=vc4-fkms-v3d/dtoverlay=vc4-fkms-v3d/g"
