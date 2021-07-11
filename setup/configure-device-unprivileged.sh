@@ -7,3 +7,12 @@
 
 set -e
 
+## Constants - don't edit unless you know what you're doing.
+PICONTROLLER_DIR='~/src/picontroller'
+UNPRIVILEGED_USER='default'
+
+# Add go to the path.
+echo 'export PATH=$PATH:/usr/local/go/bin' >> ~/.bashrc
+
+# go get github.com/pmansour/picontroller/picontroller
+

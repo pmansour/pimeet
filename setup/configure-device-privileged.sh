@@ -19,11 +19,26 @@ sudo apt upgrade -yqq
 sudo apt clean -yqq
 
 echo "Installing prerequisites.."
-sudo apt install -yqq jq vim
+sudo apt install -yqq jq vim cec-utils
+
+# Copy the picontroller to the pi.
+scp -r "$PICONTROLLER_DIR" "pi@raspberrypi.local:/home/pi/src/picontroller"
+# Compile the binaries and add it to the appropriate places.
+pushd /home/pi/src/picontroller
+go build -o ~/picontroller-creds cmd/picontroller-creds/main.go
+go build -o ~/picontroller cmd/picontroller/main.go
+
+sudo cp ~/picontroller /usr/local/bin/
+sudo cp ~/picontroller-creds /usr/local/bin/
+
+sudo chmod a+rx /usr/local/bin/picontroller
+sudo chmod a+rx /usr/local/bin/picontroller-creds
+popd
 
 # Create new unprivileged user.
 echo "Creating unprivileged user '$UNPRIVILEGED_USER'.."
-sudo adduser "$UNPRIVILEGED_USER"
+sudo deluser default
+sudo adduser --disabled-password --gecos "" "$UNPRIVILEGED_USER"
 
 # Configure secure ssh.
 sudo cp "$SSHD_CONF" "$SSHD_CONF.bak"
@@ -42,7 +57,6 @@ sudo apt install libgles2-mesa libgles2-mesa-dev xorg-dev
 # Disable compositor
 
 # Install golang
-sudo rm -rf
 wget -qO- https://golang.org/dl/go1.16.5.linux-armv6l.tar.gz | \
     sudo tar xzf - -C /usr/local 
 echo 'export PATH=$PATH:/usr/local/go/bin' >> ~/.bashrc
