@@ -1,0 +1,5 @@
+/home/default/.config/autostart/picontroller-creds.desktop
+[Desktop Entry]
+Type=Application
+Name=PiController Creds layer
+Exec=/usr/local/bin/picontroller-creds --creds-file /home/default/.config/picontroller-creds/creds.json --port 8090
