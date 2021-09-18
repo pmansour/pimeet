@@ -9,7 +9,7 @@ BOOT_MOUNT_PATH='/mnt/rpi/boot'
 DISK_MOUNT_PATH='/mnt/rpi/disk'
 
 function setup_mounts {
-    echo "Mounting RPI image to '$LOOP_INTERFACE'.."
+    echo "Mounting image '$IMG_FILE' to '$LOOP_INTERFACE'.."
     sudo losetup -P "$LOOP_INTERFACE" "$IMG_FILE"
 
     echo "Mounting boot and disk partitions.."
@@ -36,3 +36,6 @@ echo
 echo "Disk partition contents:"
 ls /mnt/rpi/disk
 echo
+
+# TODO:
+# 1. Prompt for new root password, copy that into img.
