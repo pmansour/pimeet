@@ -20,3 +20,7 @@ function confirm_device() {
 confirm_device
 ls "$DEVICE"?* | sudo xargs umount -q
 sudo dd bs=4M status=progress if="$IMG_FILE" of="$DEVICE"
+ls "$DEVICE"?* | sudo xargs umount -q
+
+echo
+echo "Done."
