@@ -106,11 +106,7 @@ echo
 echo "Copying programs.."
 GIT_TMP=`mktemp -d`
 git clone -q git@github.com:pmansour/minimeet.git "$GIT_TMP/minimeet/"
-# TODO: move to a GitHub release, or use go's mod system for this.
-# git clone -q git@github.com:pmansour/picontroller.git "$GIT_TMP/picontroller/"
-mkdir -p "$DISK_MOUNT_PATH/home/pi/src"
-cp -r "$GIT_TMP/minimeet/src2/." "$DISK_MOUNT_PATH/home/pi/src/minimeet/"
-#cp -r "$GIT_TMP/picontroller/." "$DISK_MOUNT_PATH/home/pi/src/picontroller/"
+sudo cp -r "$GIT_TMP/minimeet/src2/." "$DISK_MOUNT_PATH/usr/local/minimeet/"
 rm -rf GIT_TMP
 
 # Copy account creds for Chrome extension.
@@ -118,12 +114,25 @@ echo
 echo "Configuring meeting credentials.."
 read -p "Enter email address: " ACCOUNT_EMAIL
 read -p "Enter password: " ACCOUNT_PASSWORD
-mkdir -p "$DISK_MOUNT_PATH/home/pi/src/minimeet/config"
-cat <<EOF | sudo tee "$DISK_MOUNT_PATH/home/pi/src/minimeet/config/creds.js" >/dev/null
+sudo mkdir -p "$DISK_MOUNT_PATH/usr/local/minimeet/config"
+cat <<EOF | sudo tee "$DISK_MOUNT_PATH/usr/local/minimeet/config/creds.js" >/dev/null
 const EMAIL_ADDRESS = '$ACCOUNT_EMAIL';
 const PASSWORD = '$ACCOUNT_PASSWORD';
 EOF
-debug 'config/creds.js' "`cat "$DISK_MOUNT_PATH/home/pi/src/minimeet/config/creds.js"`"
+debug 'config/creds.js' "`cat "$DISK_MOUNT_PATH/usr/local/minimeet/config/creds.js"`"
+debug '' "`tree "$DISK_MOUNT_PATH/usr/local/minimeet"`"
+
+# Add autostart for browser.
+echo
+echo "Adding autostart for chromium.."
+mkdir -p "$DISK_MOUNT_PATH/home/pi/.config/autostart"
+cat <<EOF | sudo tee "$DISK_MOUNT_PATH/home/pi/.config/autostart/chromium.desktop" >/dev/null
+[Desktop Entry]
+Type=Application
+Name=Chromium
+Exec=/usr/bin/chromium-browser --enable-gpu-rasterization --enable-oop-rasterization --enable-accelerated-video-decode --ignore-gpu-blocklist --start-fullscreen --load-extension=/usr/local/minimeet "https://accounts.google.com/signin/v2?continue=https%3A%2F%2Fmeet.google.com"
+EOF
+debug 'autostart/chromium.desktop' "`cat "$DISK_MOUNT_PATH/home/pi/.config/autostart/chromium.desktop"`"
 
 # Finally, copy the startup script.
 echo
