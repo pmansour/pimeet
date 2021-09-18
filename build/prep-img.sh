@@ -137,6 +137,14 @@ EOF
 debug 'config/creds.js' "`cat "$DISK_MOUNT_PATH/usr/local/minimeet/config/creds.js"`"
 debug '' "`tree "$DISK_MOUNT_PATH/usr/local/minimeet"`"
 
+# Install go 1.17
+echo
+echo "Installing go 1.17.."
+wget -qO- "https://golang.org/dl/go1.17.1.linux-armv6l.tar.gz" | \
+    sudo tar xzf - -C "$DISK_MOUNT_PATH/usr/local"
+echo 'export PATH=$PATH:/usr/local/go/bin' | sudo tee -a "$DISK_MOUNT_PATH/home/pi/.bashrc" >/dev/null
+debug '' "`tree "$DISK_MOUNT_PATH/usr/local/go"`"
+
 # Add autostart for browser.
 echo
 echo "Adding autostart for chromium.."
