@@ -1,5 +1,5 @@
 #!/bin/bash
-# Prerequisites: lopsetup, mkpasswd (part of whois package).
+# Prerequisites: lopsetup, mkpasswd (part of whois package), git, tree.
 # Tested on ubuntu 20.04.
 # Author: pmansour.
 
@@ -8,10 +8,14 @@ LOOP_INTERFACE=`losetup -f`
 BOOT_MOUNT_PATH='/mnt/rpi/boot'
 DISK_MOUNT_PATH='/mnt/rpi/disk'
 SSH_KEY_PUB="$HOME/.ssh/id_rsa.pub"
+STARTUP_SCRIPT="`dirname "$0"`/../scripts/startup.sh"
 
 # $1 is context, $2 is value.
 function debug {
-    echo -e "\e[3m> $1:\n$2\e[0m" >&2
+    if [[ ! "$1" = "" ]]; then
+        echo -e "\e[3m> $1:\n\e[0m" >&2
+    fi
+    echo -e "\e[3m$2\e[0m" >&2    
 }
 
 function setup_mounts {
@@ -51,9 +55,11 @@ debug '~/.ssh/authored_keys' "`cat "$DISK_MOUNT_PATH/home/pi/.ssh/authorized_key
 # Change default password for 'pi' user.
 echo
 echo "Changing password for 'pi' user.."
-NEW_PASSWORD=`mkpasswd -5`
+read -p "Enter new password: " PASSWD
+HASHED_PASSWORD=`mkpasswd -5 "$PASSWD"`
+PASSWD='' # Clear password, just in case.
 # Use _ as sed's delimiter since the hashed password may include slashes.
-sudo sed -E -i "s@^pi:[^:]+:@pi:${NEW_PASSWORD}:@" "$DISK_MOUNT_PATH/etc/shadow"
+sudo sed -E -i "s@^pi:[^:]+:@pi:${HASHED_PASSWORD}:@" "$DISK_MOUNT_PATH/etc/shadow"
 debug 'Hashed password' "`sudo cat "$DISK_MOUNT_PATH/etc/shadow" | grep -E "^pi:"`"
 
 # Configure WiFi
@@ -82,5 +88,39 @@ sudo sed "$BOOT_MOUNT_PATH/config.txt" -i -e "s/^dtoverlay=vc4-kms-v3d/#dtoverla
 sudo sed "$BOOT_MOUNT_PATH/config.txt" -i -e "s/^#dtoverlay=vc4-fkms-v3d/dtoverlay=vc4-fkms-v3d/g"
 debug 'config.txt' "`cat "$BOOT_MOUNT_PATH/config.txt" | grep -E '^#?dtoverlay=vc4'`"
 
-# TODO:
-# 1. Prompt for new root password, copy that into img.
+# Copy files and programs.
+echo
+echo "Copying programs.."
+GIT_TMP=`mktemp -d`
+git clone -q git@github.com:pmansour/minimeet.git "$GIT_TMP/minimeet/"
+# TODO: move to a GitHub release, or use go's mod system for this.
+# git clone -q git@github.com:pmansour/picontroller.git "$GIT_TMP/picontroller/"
+mkdir -p "$DISK_MOUNT_PATH/home/pi/src"
+cp -r "$GIT_TMP/minimeet/src2/." "$DISK_MOUNT_PATH/home/pi/src/minimeet/"
+#cp -r "$GIT_TMP/picontroller/." "$DISK_MOUNT_PATH/home/pi/src/picontroller/"
+rm -rf GIT_TMP
+
+# Copy account creds for Chrome extension.
+echo
+echo "Configuring meeting credentials.."
+read -p "Enter email address: " ACCOUNT_EMAIL
+read -p "Enter password: " ACCOUNT_PASSWORD
+mkdir -p "$DISK_MOUNT_PATH/home/pi/src/minimeet/config"
+cat <<EOF | sudo tee "$DISK_MOUNT_PATH/home/pi/src/minimeet/config/creds.js" >/dev/null
+const EMAIL_ADDRESS = "$ACCOUNT_EMAIL";
+const PASSWORD = "$ACCOUNT_PASSWORD";
+EOF
+debug 'config/creds.js' "`cat "$DISK_MOUNT_PATH/home/pi/src/minimeet/config/creds.js"`"
+
+# Finally, copy the startup script.
+echo
+echo "Copying startup script.."
+cp "$STARTUP_SCRIPT" "$DISK_MOUNT_PATH/home/pi/"
+
+# Final touchups.
+echo
+rm -rf "$DISK_MOUNT_PATH/home/pi/Bookshelf"
+debug '' "`tree "$DISK_MOUNT_PATH/home/pi"`"
+
+echo
+echo "Done."
