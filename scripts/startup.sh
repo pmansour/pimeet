@@ -1,5 +1,5 @@
 #!/bin/bash
-# Script needs to be run as root (e.g. with sudo).
+# Script to be run interactively on first login.
 
 if [[ "`id -u`" -ne 0 ]]; then
     echo "This csript must be run as root. Try running 'sudo $1'."
@@ -11,13 +11,6 @@ apt-get update
 # Remove unnecessary packages that take a long time to update.
 apt-get purge --yes --auto-remove wolfram* openjdk-11-jdk*
 sudo apt-get upgrade --yes
-
-# Enable VNC server.
-echo
-echo "Installing and enabling VNC server.."
-apt-get install --yes --quiet realvnc-vnc-server
-systemctl enable vncserver-x11-serviced.service && \
-    systemctl start vncserver-x11-serviced.service
 
 # Configure autologin.
 echo
@@ -32,6 +25,13 @@ ExecStart=
 ExecStart=-/sbin/agetty --autologin pi --noclear %I \$TERM
 EOF
 sed /etc/lightdm/lightdm.conf -i -e "s/^\(#\|\)autologin-user=.*/autologin-user=pi/"
+
+# Enable VNC server.
+echo
+echo "Installing and enabling VNC server.."
+apt-get install --yes --quiet realvnc-vnc-server
+systemctl enable vncserver-x11-serviced.service && \
+    systemctl start vncserver-x11-serviced.service
 
 # Configure HDMI-CEC
 echo
