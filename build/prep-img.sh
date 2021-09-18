@@ -68,7 +68,7 @@ echo "Configuring WiFi.."
 read -p "WiFi network name: " -r WIFI_NETWORK_NAME
 read -p "WiFi network password: " -r WIFI_NETWORK_PASSWORD
 
-cat <<EOF | sudo sudo tee "$BOOT_MOUNT_PATH/wpa_supplicant.conf" >/dev/null
+cat <<EOF | sudo tee "$BOOT_MOUNT_PATH/wpa_supplicant.conf" >/dev/null
 ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=netdev
 update_config=1
 country=US
@@ -80,6 +80,15 @@ network={
 }
 EOF
 debug 'wpa_supplicant.conf' "`cat "$BOOT_MOUNT_PATH/wpa_supplicant.conf"`"
+
+# Update hostname
+echo
+echo "Updating hostname.."
+read -p "New hostname: " -r HOSTNAME
+echo "$HOSTNAME" | sudo tee "$DISK_MOUNT_PATH/etc/hostname"
+sudo sed -i "s/127.0.1.1.*$/127.0.1.1\t$HOSTNAME/g" "$DISK_MOUNT_PATH/etc/hosts"
+debug '/etc/hostname' "`cat "$DISK_MOUNT_PATH/etc/hostname"`"
+debug '/etc/hosts' "`cat "$DISK_MOUNT_PATH/etc/hosts"`"
 
 # Enable hardware accelaration
 echo
@@ -107,8 +116,8 @@ read -p "Enter email address: " ACCOUNT_EMAIL
 read -p "Enter password: " ACCOUNT_PASSWORD
 mkdir -p "$DISK_MOUNT_PATH/home/pi/src/minimeet/config"
 cat <<EOF | sudo tee "$DISK_MOUNT_PATH/home/pi/src/minimeet/config/creds.js" >/dev/null
-const EMAIL_ADDRESS = "$ACCOUNT_EMAIL";
-const PASSWORD = "$ACCOUNT_PASSWORD";
+const EMAIL_ADDRESS = '$ACCOUNT_EMAIL';
+const PASSWORD = '$ACCOUNT_PASSWORD';
 EOF
 debug 'config/creds.js' "`cat "$DISK_MOUNT_PATH/home/pi/src/minimeet/config/creds.js"`"
 
