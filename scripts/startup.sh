@@ -7,7 +7,10 @@ if [[ "`id -u`" -ne 0 ]]; then
 fi
 
 echo "Updating packages.."
-apt-get update && sudo apt-get upgrade --yes
+apt-get update
+# Remove unnecessary packages that take a long time to update.
+apt-get purge --yes --auto-remove wolfram* openjdk-11-jdk*
+sudo apt-get upgrade --yes
 
 # Enable VNC server.
 echo
