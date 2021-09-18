@@ -62,6 +62,10 @@ PASSWD='' # Clear password, just in case.
 sudo sed -E -i "s@^pi:[^:]+:@pi:${HASHED_PASSWORD}:@" "$DISK_MOUNT_PATH/etc/shadow"
 debug 'Hashed password' "`sudo cat "$DISK_MOUNT_PATH/etc/shadow" | grep -E "^pi:"`"
 
+# Require password for sudo.
+sudo sed -E -i 's/NOPASSWD://g' "$DISK_MOUNT_PATH/etc/sudoers.d/010_pi-nopasswd"
+debug 'sudoers config' "`sudo cat "$DISK_MOUNT_PATH/etc/sudoers.d/010_pi-nopasswd"`"
+
 # Configure WiFi
 echo
 echo "Configuring WiFi.."
