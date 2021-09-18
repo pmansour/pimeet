@@ -8,7 +8,7 @@ TMP_ZIP_FILE=`mktemp`
 IMG_OUTPUT_DIR="$HOME/raspios-img"
 
 if [[ -d "$IMG_OUTPUT_DIR" ]]; then
-    read -p "Directory '$IMG_OUTPUT_DIR' already exists. Overwrite? [y/N]" -n 1 -r
+    read -p "Directory '$IMG_OUTPUT_DIR' already exists. Overwrite? [y/N] " -n 1 -r
     echo
     if [[ ! "$REPLY" =~ ^[Yy]$ ]]; then
         echo "Aborted."

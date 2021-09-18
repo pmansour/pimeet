@@ -9,7 +9,7 @@ DEVICE='/dev/sda' # Find intended device (not partition) by running `lsblk`.
 function confirm_device() {
     sudo fdisk -l "$DEVICE"
     echo
-    read -p "Confirm formatting device '$DEVICE'? [y/N]" -n 1 -r
+    read -p "Confirm formatting device '$DEVICE'? [y/N] " -n 1 -r
     echo
     if [[ ! "$REPLY" =~ ^[Yy]$ ]]; then
         echo "Aborted."
