@@ -68,9 +68,9 @@ debug 'sudoers config' "`sudo cat "$DISK_MOUNT_PATH/etc/sudoers.d/010_pi-nopassw
 
 # Configure WiFi
 echo
-echo "Configuring WiFi.."
-read -p "WiFi network name: " -r WIFI_NETWORK_NAME
-read -p "WiFi network password: " -r WIFI_NETWORK_PASSWORD
+echo "Configuring WiFi networks.."
+read -p "WiFi network 1 name: " -r WIFI_NETWORK_NAME
+read -p "WiFi network 1 password: " -r WIFI_NETWORK_PASSWORD
 
 cat <<EOF | sudo tee "$BOOT_MOUNT_PATH/wpa_supplicant.conf" >/dev/null
 ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=netdev
@@ -83,6 +83,21 @@ network={
     key_mgmt=WPA-PSK
 }
 EOF
+
+# Add a second WiFi network, if needed.
+read -p "WiFi network 2 name: " -r WIFI_NETWORK_NAME
+if [[ ! "$WIFI_NETWORK_NAME" = "" ]]; then
+    read -p "WiFi network 2 password: " -r WIFI_NETWORK_PASSWORD
+    cat <<EOF | sudo tee -a "$BOOT_MOUNT_PATH/wpa_supplicant.conf" >/dev/null
+network={
+    ssid="$WIFI_NETWORK_NAME"
+    psk="$WIFI_NETWORK_PASSWORD"
+    key_mgmt=WPA-PSK
+}
+EOF
+else
+    echo "Skipping second WiFi network."
+fi
 debug 'wpa_supplicant.conf' "`cat "$BOOT_MOUNT_PATH/wpa_supplicant.conf"`"
 
 # Update hostname
