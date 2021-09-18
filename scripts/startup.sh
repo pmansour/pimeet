@@ -34,3 +34,8 @@ sed /etc/lightdm/lightdm.conf -i -e "s/^\(#\|\)autologin-user=.*/autologin-user=
 echo
 echo "Configuring HDMI-CEC"
 apt-get install --yes --quiet cec-utils
+
+# Install graphics accelaration libraries.
+echo
+echo "Installing graphics libraries.."
+apt-get install --yes --quiet libgles2-mesa libgles2-mesa-dev xorg-dev
