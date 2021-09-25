@@ -121,6 +121,7 @@ echo
 echo "Copying programs.."
 GIT_TMP=`mktemp -d`
 git clone -q git@github.com:pmansour/minimeet.git "$GIT_TMP/minimeet/"
+sudo rm -rf "$DISK_MOUNT_PATH/usr/local/minimeet"
 sudo cp -r "$GIT_TMP/minimeet/mv2/." "$DISK_MOUNT_PATH/usr/local/minimeet/"
 rm -rf GIT_TMP
 
