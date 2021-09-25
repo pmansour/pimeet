@@ -132,8 +132,8 @@ read -p "Enter email address: " ACCOUNT_EMAIL
 read -p "Enter password: " ACCOUNT_PASSWORD
 sudo mkdir -p "$DISK_MOUNT_PATH/usr/local/minimeet/config"
 cat <<EOF | sudo tee "$DISK_MOUNT_PATH/usr/local/minimeet/config/creds.js" >/dev/null
-const EMAIL_ADDRESS = '$ACCOUNT_EMAIL';
-const PASSWORD = '$ACCOUNT_PASSWORD';
+export const EMAIL_ADDRESS = '$ACCOUNT_EMAIL';
+export const PASSWORD = '$ACCOUNT_PASSWORD';
 EOF
 debug 'config/creds.js' "`cat "$DISK_MOUNT_PATH/usr/local/minimeet/config/creds.js"`"
 debug '' "`tree "$DISK_MOUNT_PATH/usr/local/minimeet"`"
@@ -154,7 +154,7 @@ cat <<EOF | sudo tee "$DISK_MOUNT_PATH/home/pi/.config/autostart/chromium.deskto
 [Desktop Entry]
 Type=Application
 Name=Chromium
-Exec=/usr/bin/chromium-browser --enable-gpu-rasterization --enable-oop-rasterization --enable-accelerated-video-decode --ignore-gpu-blocklist --start-fullscreen --load-extension=/usr/local/minimeet "https://accounts.google.com/signin/v2?continue=https%3A%2F%2Fmeet.google.com"
+Exec=/usr/bin/chromium-browser --enable-gpu-rasterization --enable-oop-rasterization --enable-accelerated-video-decode --ignore-gpu-blocklist --start-fullscreen --disable-infobars --load-extension=/usr/local/minimeet "https://accounts.google.com/signin/v2?continue=https%3A%2F%2Fmeet.google.com"
 EOF
 debug 'autostart/chromium.desktop' "`cat "$DISK_MOUNT_PATH/home/pi/.config/autostart/chromium.desktop"`"
 
