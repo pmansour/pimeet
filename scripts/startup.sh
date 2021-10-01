@@ -35,8 +35,22 @@ systemctl enable vncserver-x11-serviced.service && \
 
 # Configure HDMI-CEC
 echo
-echo "Configuring HDMI-CEC"
+echo "Configuring HDMI-CEC.."
 apt-get install --yes --quiet cec-utils
+
+# Update the locale and timezone.
+echo
+echo "Updating locale and timezone.."
+LOCALE='en_US.UTF-8'
+ENCODING='UTF-8'
+sed -E -i 's/^\s*#?\s*en_US.UTF-8 UTF-8$/en_US.UTF-8 UTF-8/' '/etc/locale.gen'
+sed -i "s/^\s*LANG=\S*/LANG=en_US.UTF-8/" '/etc/default/locale'
+dpkg-reconfigure -f noninteractive locales
+
+TIMEZONE='US/Pacific'
+rm /etc/localtime
+echo "$TIMEZONE" > /etc/timezone
+dpkg-reconfigure -f noninteractive tzdata
 
 # Install graphics accelaration libraries.
 echo
