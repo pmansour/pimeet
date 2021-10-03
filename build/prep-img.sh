@@ -8,7 +8,7 @@ LOOP_INTERFACE=`losetup -f`
 BOOT_MOUNT_PATH='/mnt/rpi/boot'
 DISK_MOUNT_PATH='/mnt/rpi/disk'
 SSH_KEY_PUB="$HOME/.ssh/id_rsa.pub"
-STARTUP_SCRIPT="`dirname "$0"`/../scripts/startup.sh"
+SCRIPTS_DIR="`dirname "$0"`/../scripts/"
 
 # $1 is context, $2 is value.
 function debug {
@@ -158,10 +158,11 @@ Exec=/usr/bin/chromium-browser --enable-gpu-rasterization --enable-oop-rasteriza
 EOF
 debug 'autostart/chromium.desktop' "`cat "$DISK_MOUNT_PATH/home/pi/.config/autostart/chromium.desktop"`"
 
-# Finally, copy the startup script.
+# Finally, copy startup scripts.
 echo
-echo "Copying startup script.."
-cp "$STARTUP_SCRIPT" "$DISK_MOUNT_PATH/home/pi/"
+echo "Copying scripts.."
+cp "$SCRIPTS_DIR/startup.sh" "$DISK_MOUNT_PATH/home/pi/"
+cp "$SCRIPTS_DIR/update-extension.sh" "$DISK_MOUNT_PATH/home/pi/"
 
 # Final touchups.
 echo
