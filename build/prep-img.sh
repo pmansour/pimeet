@@ -9,6 +9,7 @@ BOOT_MOUNT_PATH='/mnt/rpi/boot'
 DISK_MOUNT_PATH='/mnt/rpi/disk'
 SSH_KEY_PUB="$HOME/.ssh/id_rsa.pub"
 SCRIPTS_DIR="`dirname "$0"`/../scripts/"
+BOOT_CONFIG_FILE="$BOOT_MOUNT_PATH/config.txt"
 
 # $1 is context, $2 is value.
 function debug {
@@ -112,9 +113,9 @@ debug '/etc/hosts' "`cat "$DISK_MOUNT_PATH/etc/hosts"`"
 # Enable hardware accelaration
 echo
 echo "Configuring hardware accelaration.."
-sudo sed "$BOOT_MOUNT_PATH/config.txt" -i -e "s/^dtoverlay=vc4-kms-v3d/#dtoverlay=vc4-kms-v3d/g"
-sudo sed "$BOOT_MOUNT_PATH/config.txt" -i -e "s/^#dtoverlay=vc4-fkms-v3d/dtoverlay=vc4-fkms-v3d/g"
-debug 'config.txt' "`cat "$BOOT_MOUNT_PATH/config.txt" | grep -E '^#?dtoverlay=vc4'`"
+sudo sed "$BOOT_CONFIG_FILE" -i -e "s/^dtoverlay=vc4-kms-v3d/#dtoverlay=vc4-kms-v3d/g"
+sudo sed "$BOOT_CONFIG_FILE" -i -e "s/^#dtoverlay=vc4-fkms-v3d/dtoverlay=vc4-fkms-v3d/g"
+debug 'config.txt' "`cat "$BOOT_CONFIG_FILE" | grep -E '^#?dtoverlay=vc4'`"
 
 # Enable fan temperature control
 echo
@@ -122,15 +123,15 @@ echo "Configuring fan at 65° on GPIO pin 14.."
 FAN_GPIO=14
 FAN_TEMP=65000 # 65° C in millicelcius.
 # Copied from https://github.com/RPi-Distro/raspi-config/blob/de70c08c7629b2370d683193a62587ca30051e36/raspi-config#L1274
-if ! grep -q "dtoverlay=gpio-fan" "$BOOT_MOUNT_PATH/config.txt" ; then
-    if ! tail -1 "$BOOT_MOUNT_PATH/config.txt" | grep -q "\\[all\\]" ; then
-        sed "$BOOT_MOUNT_PATH/config.txt" -i -e "\$a[all]"
+if ! sudo grep -q "dtoverlay=gpio-fan" "$BOOT_CONFIG_FILE" ; then
+    if ! sudo tail -1 "$BOOT_CONFIG_FILE" | grep -q "\\[all\\]" ; then
+        sudo sed "$BOOT_CONFIG_FILE" -i -e "\$a[all]"
     fi
-    sed "$BOOT_MOUNT_PATH/config.txt" -i -e "\$adtoverlay=gpio-fan,gpiopin=$FAN_GPIO,temp=$FAN_TEMP"
+    sudo sed "$BOOT_CONFIG_FILE" -i -e "\$adtoverlay=gpio-fan,gpiopin=$FAN_GPIO,temp=$FAN_TEMP"
 else
-    sed "$BOOT_MOUNT_PATH/config.txt" -i -e "s/^.*dtoverlay=gpio-fan.*/dtoverlay=gpio-fan,gpiopin=$FAN_GPIO,temp=$FAN_TEMP/"
+    sudo sed "$BOOT_CONFIG_FILE" -i -e "s/^.*dtoverlay=gpio-fan.*/dtoverlay=gpio-fan,gpiopin=$FAN_GPIO,temp=$FAN_TEMP/"
 fi
-debug 'config.txt' "`cat "$BOOT_MOUNT_PATH/config.txt" | grep 'gpio-fan'`"
+debug 'config.txt' "`cat "$BOOT_CONFIG_FILE" | grep 'gpio-fan'`"
 
 # Copy files and programs.
 echo
