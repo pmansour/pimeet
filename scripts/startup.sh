@@ -2,7 +2,7 @@
 # Script to be run interactively on first login.
 
 if [[ "`id -u`" -ne 0 ]]; then
-    echo "This csript must be run as root. Try running 'sudo $1'."
+    echo "This script must be run as root. Try running 'sudo $1'."
     exit 1
 fi
 
