@@ -119,9 +119,9 @@ debug 'config.txt' "`cat "$BOOT_CONFIG_FILE" | grep -E '^#?dtoverlay=vc4'`"
 
 # Enable fan temperature control
 echo
-echo "Configuring fan at 65° on GPIO pin 14.."
+echo "Configuring fan at 60° on GPIO pin 14.."
 FAN_GPIO=14
-FAN_TEMP=65000 # 65° C in millicelcius.
+FAN_TEMP=60000 # 60° C in millicelcius.
 # Copied from https://github.com/RPi-Distro/raspi-config/blob/de70c08c7629b2370d683193a62587ca30051e36/raspi-config#L1274
 if ! sudo grep -q "dtoverlay=gpio-fan" "$BOOT_CONFIG_FILE" ; then
     if ! sudo tail -1 "$BOOT_CONFIG_FILE" | grep -q "\\[all\\]" ; then
