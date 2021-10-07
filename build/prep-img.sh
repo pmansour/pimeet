@@ -116,6 +116,22 @@ sudo sed "$BOOT_MOUNT_PATH/config.txt" -i -e "s/^dtoverlay=vc4-kms-v3d/#dtoverla
 sudo sed "$BOOT_MOUNT_PATH/config.txt" -i -e "s/^#dtoverlay=vc4-fkms-v3d/dtoverlay=vc4-fkms-v3d/g"
 debug 'config.txt' "`cat "$BOOT_MOUNT_PATH/config.txt" | grep -E '^#?dtoverlay=vc4'`"
 
+# Enable fan temperature control
+echo
+echo "Configuring fan at 65° on GPIO pin 14.."
+FAN_GPIO=14
+FAN_TEMP=65000 # 65° C in millicelcius.
+# Copied from https://github.com/RPi-Distro/raspi-config/blob/de70c08c7629b2370d683193a62587ca30051e36/raspi-config#L1274
+if ! grep -q "dtoverlay=gpio-fan" "$BOOT_MOUNT_PATH/config.txt" ; then
+    if ! tail -1 "$BOOT_MOUNT_PATH/config.txt" | grep -q "\\[all\\]" ; then
+        sed "$BOOT_MOUNT_PATH/config.txt" -i -e "\$a[all]"
+    fi
+    sed "$BOOT_MOUNT_PATH/config.txt" -i -e "\$adtoverlay=gpio-fan,gpiopin=$FAN_GPIO,temp=$FAN_TEMP"
+else
+    sed "$BOOT_MOUNT_PATH/config.txt" -i -e "s/^.*dtoverlay=gpio-fan.*/dtoverlay=gpio-fan,gpiopin=$FAN_GPIO,temp=$FAN_TEMP/"
+fi
+debug 'config.txt' "`cat "$BOOT_MOUNT_PATH/config.txt" | grep 'gpio-fan'`"
+
 # Copy files and programs.
 echo
 echo "Copying programs.."
