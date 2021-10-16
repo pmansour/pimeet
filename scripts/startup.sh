@@ -58,4 +58,4 @@ echo "Installing graphics libraries.."
 apt-get install --yes --quiet libgles2-mesa libgles2-mesa-dev xorg-dev
 
 # Installing other useful tools
-apt-get install --yes --quiet vim
+apt-get install --yes --quiet vim stress-ng
