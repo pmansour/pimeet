@@ -59,3 +59,6 @@ apt-get install --yes --quiet libgles2-mesa libgles2-mesa-dev xorg-dev
 
 # Installing other useful tools
 apt-get install --yes --quiet vim stress-ng
+
+# Remove useless stuff that's still present
+apt-get autoremove
