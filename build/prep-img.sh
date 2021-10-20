@@ -178,12 +178,11 @@ debug 'autostart/chromium.desktop' "`cat "$DISK_MOUNT_PATH/home/pi/.config/autos
 # Finally, copy startup scripts.
 echo
 echo "Copying scripts.."
-cp "$SCRIPTS_DIR/startup.sh" "$DISK_MOUNT_PATH/home/pi/"
-cp "$SCRIPTS_DIR/update-extension.sh" "$DISK_MOUNT_PATH/home/pi/"
+mkdir -p "$DISK_MOUNT_PATH/home/pi/scripts"
+cp "$SCRIPTS_DIR/*" "$DISK_MOUNT_PATH/home/pi/scripts/"
 
 # Final touchups.
 echo
-rm -rf "$DISK_MOUNT_PATH/home/pi/Bookshelf"
 debug '' "`tree "$DISK_MOUNT_PATH/home/pi"`"
 
 echo
