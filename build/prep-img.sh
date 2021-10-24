@@ -19,6 +19,11 @@ function debug {
     echo -e "\e[3m$2\e[0m" >&2    
 }
 
+# $1 is flag name, $2 is value.
+function update_boot_config_setting() {
+    sudo sed -i -E "s/^#?\s*$1=.*$/$1=$2/g" "$BOOT_CONFIG_FILE"
+}
+
 function setup_mounts {
     echo "Mounting image '$IMG_FILE' to '$LOOP_INTERFACE'.."
     sudo losetup -P "$LOOP_INTERFACE" "$IMG_FILE"
@@ -116,6 +121,12 @@ echo "Configuring hardware accelaration.."
 sudo sed "$BOOT_CONFIG_FILE" -i -e "s/^dtoverlay=vc4-kms-v3d/#dtoverlay=vc4-kms-v3d/g"
 sudo sed "$BOOT_CONFIG_FILE" -i -e "s/^#dtoverlay=vc4-fkms-v3d/dtoverlay=vc4-fkms-v3d/g"
 debug 'config.txt' "`cat "$BOOT_CONFIG_FILE" | grep -E '^#?dtoverlay=vc4'`"
+
+# Set fixed screen resolution, per https://pimylifeup.com/raspberry-pi-screen-resolution/
+echo
+echo "Configuring screen resolution.."
+update_boot_config_setting hdmi_group 1 # Group 1 (CEA) is for TVs, 2 (DMT) is for monitors.
+update_boot_config_setting hdmi_mode 16 # CEA Mode 16 is 1920x1080 resolution at 60hz 16:9.
 
 # Enable fan temperature control
 echo
