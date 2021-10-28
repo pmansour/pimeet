@@ -190,7 +190,7 @@ debug 'autostart/chromium.desktop' "`cat "$DISK_MOUNT_PATH/home/pi/.config/autos
 echo
 echo "Copying scripts.."
 mkdir -p "$DISK_MOUNT_PATH/home/pi/scripts"
-cp "$SCRIPTS_DIR/*" "$DISK_MOUNT_PATH/home/pi/scripts/"
+cp -r "$SCRIPTS_DIR" "$DISK_MOUNT_PATH/home/pi/"
 
 # Final touchups.
 echo
