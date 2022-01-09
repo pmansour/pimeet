@@ -62,3 +62,12 @@ apt-get install --yes --quiet vim stress-ng
 
 # Remove useless stuff that's still present
 apt-get autoremove --yes --quiet
+
+# Install argonone tools
+echo
+echo "Installing argonone tools.."
+curl https://download.argon40.com/argon1.sh | bash
+
+echo
+echo "Don't forget to run argonone-config and argonone-ir"
+echo "Done."
