@@ -181,9 +181,9 @@ Type=Application
 Name=Chromium
 Exec=/usr/bin/chromium-browser --enable-gpu-rasterization --enable-oop-rasterization --enable-accelerated-video-decode --ignore-gpu-blocklist --start-fullscreen --disable-session-crashed-bubble --load-extension=/usr/local/minimeet "https://accounts.google.com/signin/v2?continue=https%3A%2F%2Fmeet.google.com"
 EOF
-# Create a symlink on the Desktop that can easily be double-clicked interactively.
+# Create a copy on the Desktop that can easily be double-clicked interactively.
 mkdir -p "$DISK_MOUNT_PATH/home/pi/Desktop"
-ln -s "$AUTOSTART_DIR/chromium.desktop" "$DISK_MOUNT_PATH/home/pi/Desktop/JoinMeeting.desktop"
+cp "$AUTOSTART_DIR/chromium.desktop" "$DISK_MOUNT_PATH/home/pi/Desktop/JoinMeeting.desktop"
 debug 'autostart/chromium.desktop' "`cat "$DISK_MOUNT_PATH/home/pi/.config/autostart/chromium.desktop"`"
 
 # Finally, copy startup scripts.
