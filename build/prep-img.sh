@@ -183,6 +183,7 @@ Exec=/usr/bin/chromium-browser --enable-gpu-rasterization --enable-oop-rasteriza
 EOF
 # Create a copy on the Desktop that can easily be double-clicked interactively.
 mkdir -p "$DISK_MOUNT_PATH/home/pi/Desktop"
+rm -f "$DISK_MOUNT_PATH/home/pi/Desktop/JoinMeeting.desktop"
 cp "$AUTOSTART_DIR/chromium.desktop" "$DISK_MOUNT_PATH/home/pi/Desktop/JoinMeeting.desktop"
 debug 'autostart/chromium.desktop' "`cat "$DISK_MOUNT_PATH/home/pi/.config/autostart/chromium.desktop"`"
 
@@ -206,7 +207,7 @@ set -e
 # Delete myself
 rm "$0"
 EOF
-chmod +x "$DISK_MOUNT_PATH/etc/init.d/first-boot.sh"
+sudo chmod +x "$DISK_MOUNT_PATH/etc/init.d/first-boot.sh"
 
 # Final touchups.
 echo
