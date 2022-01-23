@@ -115,13 +115,6 @@ sudo sed -i "s/127.0.1.1.*$/127.0.1.1\t$HOSTNAME/g" "$DISK_MOUNT_PATH/etc/hosts"
 debug '/etc/hostname' "`cat "$DISK_MOUNT_PATH/etc/hostname"`"
 debug '/etc/hosts' "`cat "$DISK_MOUNT_PATH/etc/hosts"`"
 
-# Enable hardware accelaration
-echo
-echo "Configuring hardware accelaration.."
-sudo sed "$BOOT_CONFIG_FILE" -i -e "s/^dtoverlay=vc4-kms-v3d/#dtoverlay=vc4-kms-v3d/g"
-sudo sed "$BOOT_CONFIG_FILE" -i -e "s/^#dtoverlay=vc4-fkms-v3d/dtoverlay=vc4-fkms-v3d/g"
-debug 'config.txt' "`cat "$BOOT_CONFIG_FILE" | grep -E '^#?dtoverlay=vc4'`"
-
 # Set fixed screen resolution, per https://pimylifeup.com/raspberry-pi-screen-resolution/
 echo
 echo "Configuring screen resolution.."
@@ -166,24 +159,27 @@ EOF
 debug 'config/creds.js' "`cat "$DISK_MOUNT_PATH/usr/local/minimeet/config/creds.js"`"
 debug '' "`tree "$DISK_MOUNT_PATH/usr/local/minimeet"`"
 
-# Install go 1.17
-echo
-echo "Installing go 1.17.."
-wget -qO- "https://golang.org/dl/go1.17.1.linux-armv6l.tar.gz" | \
-    sudo tar xzf - -C "$DISK_MOUNT_PATH/usr/local"
-echo 'export PATH=$PATH:/usr/local/go/bin' | sudo tee -a "$DISK_MOUNT_PATH/home/pi/.bashrc" >/dev/null
-debug '/usr/local/go' "`ls "$DISK_MOUNT_PATH/usr/local/go"`"
+# # Install go 1.17
+# echo
+# echo "Installing go 1.17.."
+# wget -qO- "https://golang.org/dl/go1.17.1.linux-armv6l.tar.gz" | \
+#     sudo tar xzf - -C "$DISK_MOUNT_PATH/usr/local"
+# echo 'export PATH=$PATH:/usr/local/go/bin' | sudo tee -a "$DISK_MOUNT_PATH/home/pi/.bashrc" >/dev/null
+# debug '/usr/local/go' "`ls "$DISK_MOUNT_PATH/usr/local/go"`"
 
 # Add autostart for browser.
 echo
 echo "Adding autostart for chromium.."
-mkdir -p "$DISK_MOUNT_PATH/home/pi/.config/autostart"
-cat <<EOF | sudo tee "$DISK_MOUNT_PATH/home/pi/.config/autostart/chromium.desktop" >/dev/null
+AUTOSTART_DIR="$DISK_MOUNT_PATH/home/pi/.config/autostart"
+mkdir -p "$AUTOSTART_DIR"
+cat <<EOF | sudo tee "$AUTOSTART_DIR/chromium.desktop" >/dev/null
 [Desktop Entry]
 Type=Application
 Name=Chromium
 Exec=/usr/bin/chromium-browser --enable-gpu-rasterization --enable-oop-rasterization --enable-accelerated-video-decode --ignore-gpu-blocklist --start-fullscreen --disable-session-crashed-bubble --load-extension=/usr/local/minimeet "https://accounts.google.com/signin/v2?continue=https%3A%2F%2Fmeet.google.com"
 EOF
+# Create a symlink on the Desktop that can easily be double-clicked interactively.
+ln -s "$AUTOSTART_DIR/chromium.desktop" "$DISK_MOUNT_PATH/home/pi/Desktop/JoinMeeting.desktop"
 debug 'autostart/chromium.desktop' "`cat "$DISK_MOUNT_PATH/home/pi/.config/autostart/chromium.desktop"`"
 
 # Finally, copy startup scripts.
