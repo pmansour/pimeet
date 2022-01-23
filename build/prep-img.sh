@@ -3,6 +3,9 @@
 # Tested on ubuntu 20.04.
 # Author: pmansour.
 
+# Exit when any command fails.
+set -e
+
 IMG_FILE="$HOME/raspios-img/2021-10-30-raspios-bullseye-armhf.img"
 LOOP_INTERFACE=`losetup -f`
 BOOT_MOUNT_PATH='/mnt/rpi/boot'
@@ -64,8 +67,8 @@ echo "Changing password for 'pi' user.."
 read -p "Enter new password: " PASSWD
 HASHED_PASSWORD=`mkpasswd -5 "$PASSWD"`
 PASSWD='' # Clear password, just in case.
-# Use _ as sed's delimiter since the hashed password may include slashes.
-sudo sed -E -i "s@^pi:[^:]+:@pi:${HASHED_PASSWORD}:@" "$DISK_MOUNT_PATH/etc/shadow"
+# Use @ as sed's delimiter since the hashed password may include slashes.
+sudo sed -E -i "s@^pi:[^:]*:@pi:${HASHED_PASSWORD}:@" "$DISK_MOUNT_PATH/etc/shadow"
 debug 'Hashed password' "`sudo cat "$DISK_MOUNT_PATH/etc/shadow" | grep -E "^pi:"`"
 
 # Require password for sudo.
@@ -179,6 +182,7 @@ Name=Chromium
 Exec=/usr/bin/chromium-browser --enable-gpu-rasterization --enable-oop-rasterization --enable-accelerated-video-decode --ignore-gpu-blocklist --start-fullscreen --disable-session-crashed-bubble --load-extension=/usr/local/minimeet "https://accounts.google.com/signin/v2?continue=https%3A%2F%2Fmeet.google.com"
 EOF
 # Create a symlink on the Desktop that can easily be double-clicked interactively.
+mkdir -p "$DISK_MOUNT_PATH/home/pi/Desktop"
 ln -s "$AUTOSTART_DIR/chromium.desktop" "$DISK_MOUNT_PATH/home/pi/Desktop/JoinMeeting.desktop"
 debug 'autostart/chromium.desktop' "`cat "$DISK_MOUNT_PATH/home/pi/.config/autostart/chromium.desktop"`"
 
