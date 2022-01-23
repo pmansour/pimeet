@@ -6,15 +6,12 @@ if [[ "`id -u`" -ne 0 ]]; then
     exit 1
 fi
 
-echo "Updating package listing.."
-apt-get update
-
 # Necessary hack to re-enable WiFi in RPI-OS bullseye.
 echo "Unblocking WiFi.."
-sudo apt install urfkill
-sudo unblock wifi
+rfkill unblock wifi
 
-echo "Upgrading existing packages.."
+echo "Updating packages.."
+apt-get update
 apt-get upgrade --yes
 
 # Configure autologin.
