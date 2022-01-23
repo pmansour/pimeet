@@ -3,8 +3,7 @@
 # Tested on ubuntu 20.04.
 # Author: pmansour.
 
-# TODO: consider using the minimalist image and installing only necessary packages.
-DOWNLOAD_URL='https://downloads.raspberrypi.org/raspios_full_armhf/images/raspios_full_armhf-2021-05-28/2021-05-07-raspios-buster-armhf-full.zip'
+DOWNLOAD_URL='https://downloads.raspberrypi.org/raspios_armhf/images/raspios_armhf-2021-11-08/2021-10-30-raspios-bullseye-armhf.zip'
 TMP_ZIP_FILE=`mktemp`
 IMG_OUTPUT_DIR="$HOME/raspios-img"
 

@@ -3,7 +3,7 @@
 # Tested on ubuntu 20.04.
 # Author: pmansour.
 
-IMG_FILE="$HOME/raspios-img/2021-05-07-raspios-buster-armhf-full.img"
+IMG_FILE="$HOME/raspios-img/2021-10-30-raspios-bullseye-armhf.img"
 LOOP_INTERFACE=`losetup -f`
 BOOT_MOUNT_PATH='/mnt/rpi/boot'
 DISK_MOUNT_PATH='/mnt/rpi/disk'
@@ -16,7 +16,7 @@ function debug {
     if [[ ! "$1" = "" ]]; then
         echo -e "\e[3m> $1:\n\e[0m" >&2
     fi
-    echo -e "\e[3m$2\e[0m" >&2    
+    echo -e "\e[3m$2\e[0m" >&2
 }
 
 # $1 is flag name, $2 is value.

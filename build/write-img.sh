@@ -3,7 +3,7 @@
 # Tested on ubuntu 20.04.
 # Author: pmansour.
 
-IMG_FILE="$HOME/raspios-img/2021-05-07-raspios-buster-armhf-full.img"
+IMG_FILE="$HOME/raspios-img/2021-10-30-raspios-bullseye-armhf.img"
 DEVICE='/dev/sda' # Find intended device (not partition) by running `lsblk`.
 
 function confirm_device() {
