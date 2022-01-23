@@ -6,10 +6,15 @@ if [[ "`id -u`" -ne 0 ]]; then
     exit 1
 fi
 
-echo "Updating packages.."
+echo "Updating package listing.."
 apt-get update
-# Remove unnecessary packages that take a long time to update.
-apt-get purge --yes --auto-remove wolfram* openjdk-11-jdk*
+
+# Necessary hack to re-enable WiFi in RPI-OS bullseye.
+echo "Unblocking WiFi.."
+sudo apt install urfkill
+sudo unblock wifi
+
+echo "Upgrading existing packages.."
 apt-get upgrade --yes
 
 # Configure autologin.
@@ -33,10 +38,10 @@ apt-get install --yes --quiet realvnc-vnc-server
 systemctl enable vncserver-x11-serviced.service && \
     systemctl start vncserver-x11-serviced.service
 
-# Configure HDMI-CEC
-echo
-echo "Configuring HDMI-CEC.."
-apt-get install --yes --quiet cec-utils
+# # Configure HDMI-CEC
+# echo
+# echo "Configuring HDMI-CEC.."
+# apt-get install --yes --quiet cec-utils
 
 # Update the locale and timezone.
 echo
@@ -52,10 +57,10 @@ rm /etc/localtime
 echo "$TIMEZONE" > /etc/timezone
 dpkg-reconfigure -f noninteractive tzdata
 
-# Install graphics accelaration libraries.
-echo
-echo "Installing graphics libraries.."
-apt-get install --yes --quiet libgles2-mesa libgles2-mesa-dev xorg-dev
+# # Install graphics accelaration libraries.
+# echo
+# echo "Installing graphics libraries.."
+# apt-get install --yes --quiet libgles2-mesa libgles2-mesa-dev xorg-dev
 
 # Installing other useful tools
 apt-get install --yes --quiet vim stress-ng
