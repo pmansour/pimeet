@@ -192,6 +192,22 @@ echo "Copying scripts.."
 mkdir -p "$DISK_MOUNT_PATH/home/pi/scripts"
 cp -r "$SCRIPTS_DIR" "$DISK_MOUNT_PATH/home/pi/"
 
+# Make the main startup script run on first boot.
+echo "Setting up first-boot script run.."
+cat <<EOF | sudo tee "$DISK_MOUNT_PATH/etc/init.d/first-boot.sh" >/dev/null
+#!/bin/bash
+
+# Stop the self-deletion if startup.sh didn't complete.
+set -e
+
+# First-boot initialization.
+. "/home/pi/scripts/startup.sh"
+
+# Delete myself
+rm "$0"
+EOF
+chmod +x "$DISK_MOUNT_PATH/etc/init.d/first-boot.sh"
+
 # Final touchups.
 echo
 debug '' "`tree "$DISK_MOUNT_PATH/home/pi"`"
