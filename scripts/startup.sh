@@ -8,7 +8,7 @@ fi
 
 # Necessary hack to re-enable WiFi in RPI-OS bullseye.
 echo "Unblocking WiFi.."
-rfkill unblock wifi
+rfkill unblock wlan
 
 echo "Updating packages.."
 apt-get update
