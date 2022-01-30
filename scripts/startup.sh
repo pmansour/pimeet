@@ -6,11 +6,17 @@ if [[ "`id -u`" -ne 0 ]]; then
     exit 1
 fi
 
+# Necessary hack to re-enable WiFi in RPI-OS bullseye.
+echo "Waiting for system to load.."
+sleep 15s
+
+echo "Unblocking WiFi.."
+rfkill unblock wlan
+sleep 20s
+
 echo "Updating packages.."
 apt-get update
-# Remove unnecessary packages that take a long time to update.
-apt-get purge --yes --auto-remove wolfram* openjdk-11-jdk*
-sudo apt-get upgrade --yes
+apt-get upgrade --yes
 
 # Configure autologin.
 echo
@@ -33,11 +39,6 @@ apt-get install --yes --quiet realvnc-vnc-server
 systemctl enable vncserver-x11-serviced.service && \
     systemctl start vncserver-x11-serviced.service
 
-# Configure HDMI-CEC
-echo
-echo "Configuring HDMI-CEC.."
-apt-get install --yes --quiet cec-utils
-
 # Update the locale and timezone.
 echo
 echo "Updating locale and timezone.."
@@ -52,11 +53,6 @@ rm /etc/localtime
 echo "$TIMEZONE" > /etc/timezone
 dpkg-reconfigure -f noninteractive tzdata
 
-# Install graphics accelaration libraries.
-echo
-echo "Installing graphics libraries.."
-apt-get install --yes --quiet libgles2-mesa libgles2-mesa-dev xorg-dev
-
 # Installing other useful tools
 apt-get install --yes --quiet vim stress-ng
 
@@ -67,6 +63,10 @@ apt-get autoremove --yes --quiet
 echo
 echo "Installing argonone tools.."
 curl https://download.argon40.com/argon1.sh | bash
+
+echo
+echo "Disabling first-boot systemd service.."
+rm -f "/etc/systemd/system/default.target.wants/firstboot.service"
 
 echo
 echo "Don't forget to run argonone-config and argonone-ir"

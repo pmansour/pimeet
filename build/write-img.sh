@@ -3,8 +3,9 @@
 # Tested on ubuntu 20.04.
 # Author: pmansour.
 
-IMG_FILE="$HOME/raspios-img/2021-05-07-raspios-buster-armhf-full.img"
-DEVICE='/dev/sda' # Find intended device (not partition) by running `lsblk`.
+IMG_FILE="$HOME/raspios-img/2021-10-30-raspios-bullseye-armhf.img"
+DEVICE='/dev/mmcblk0' # Find intended device (not partition) by running `lsblk`.
+                      # SHould look something like '/dev/sda' for a USB adapter, or '/dev/mmcblk0' for a native SD card slot.
 
 function confirm_device() {
     sudo fdisk -l "$DEVICE"

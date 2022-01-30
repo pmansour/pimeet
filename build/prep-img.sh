@@ -3,7 +3,10 @@
 # Tested on ubuntu 20.04.
 # Author: pmansour.
 
-IMG_FILE="$HOME/raspios-img/2021-05-07-raspios-buster-armhf-full.img"
+# Exit when any command fails.
+set -e
+
+IMG_FILE="$HOME/raspios-img/2021-10-30-raspios-bullseye-armhf.img"
 LOOP_INTERFACE=`losetup -f`
 BOOT_MOUNT_PATH='/mnt/rpi/boot'
 DISK_MOUNT_PATH='/mnt/rpi/disk'
@@ -16,7 +19,7 @@ function debug {
     if [[ ! "$1" = "" ]]; then
         echo -e "\e[3m> $1:\n\e[0m" >&2
     fi
-    echo -e "\e[3m$2\e[0m" >&2    
+    echo -e "\e[3m$2\e[0m" >&2
 }
 
 # $1 is flag name, $2 is value.
@@ -64,8 +67,8 @@ echo "Changing password for 'pi' user.."
 read -p "Enter new password: " PASSWD
 HASHED_PASSWORD=`mkpasswd -5 "$PASSWD"`
 PASSWD='' # Clear password, just in case.
-# Use _ as sed's delimiter since the hashed password may include slashes.
-sudo sed -E -i "s@^pi:[^:]+:@pi:${HASHED_PASSWORD}:@" "$DISK_MOUNT_PATH/etc/shadow"
+# Use @ as sed's delimiter since the hashed password may include slashes.
+sudo sed -E -i "s@^pi:[^:]*:@pi:${HASHED_PASSWORD}:@" "$DISK_MOUNT_PATH/etc/shadow"
 debug 'Hashed password' "`sudo cat "$DISK_MOUNT_PATH/etc/shadow" | grep -E "^pi:"`"
 
 # Require password for sudo.
@@ -115,13 +118,6 @@ sudo sed -i "s/127.0.1.1.*$/127.0.1.1\t$HOSTNAME/g" "$DISK_MOUNT_PATH/etc/hosts"
 debug '/etc/hostname' "`cat "$DISK_MOUNT_PATH/etc/hostname"`"
 debug '/etc/hosts' "`cat "$DISK_MOUNT_PATH/etc/hosts"`"
 
-# Enable hardware accelaration
-echo
-echo "Configuring hardware accelaration.."
-sudo sed "$BOOT_CONFIG_FILE" -i -e "s/^dtoverlay=vc4-kms-v3d/#dtoverlay=vc4-kms-v3d/g"
-sudo sed "$BOOT_CONFIG_FILE" -i -e "s/^#dtoverlay=vc4-fkms-v3d/dtoverlay=vc4-fkms-v3d/g"
-debug 'config.txt' "`cat "$BOOT_CONFIG_FILE" | grep -E '^#?dtoverlay=vc4'`"
-
 # Set fixed screen resolution, per https://pimylifeup.com/raspberry-pi-screen-resolution/
 echo
 echo "Configuring screen resolution.."
@@ -166,24 +162,29 @@ EOF
 debug 'config/creds.js' "`cat "$DISK_MOUNT_PATH/usr/local/minimeet/config/creds.js"`"
 debug '' "`tree "$DISK_MOUNT_PATH/usr/local/minimeet"`"
 
-# Install go 1.17
-echo
-echo "Installing go 1.17.."
-wget -qO- "https://golang.org/dl/go1.17.1.linux-armv6l.tar.gz" | \
-    sudo tar xzf - -C "$DISK_MOUNT_PATH/usr/local"
-echo 'export PATH=$PATH:/usr/local/go/bin' | sudo tee -a "$DISK_MOUNT_PATH/home/pi/.bashrc" >/dev/null
-debug '/usr/local/go' "`ls "$DISK_MOUNT_PATH/usr/local/go"`"
+# # Install go 1.17
+# echo
+# echo "Installing go 1.17.."
+# wget -qO- "https://golang.org/dl/go1.17.1.linux-armv6l.tar.gz" | \
+#     sudo tar xzf - -C "$DISK_MOUNT_PATH/usr/local"
+# echo 'export PATH=$PATH:/usr/local/go/bin' | sudo tee -a "$DISK_MOUNT_PATH/home/pi/.bashrc" >/dev/null
+# debug '/usr/local/go' "`ls "$DISK_MOUNT_PATH/usr/local/go"`"
 
 # Add autostart for browser.
 echo
 echo "Adding autostart for chromium.."
-mkdir -p "$DISK_MOUNT_PATH/home/pi/.config/autostart"
-cat <<EOF | sudo tee "$DISK_MOUNT_PATH/home/pi/.config/autostart/chromium.desktop" >/dev/null
+AUTOSTART_DIR="$DISK_MOUNT_PATH/home/pi/.config/autostart"
+mkdir -p "$AUTOSTART_DIR"
+cat <<EOF | sudo tee "$AUTOSTART_DIR/chromium.desktop" >/dev/null
 [Desktop Entry]
 Type=Application
 Name=Chromium
 Exec=/usr/bin/chromium-browser --enable-gpu-rasterization --enable-oop-rasterization --enable-accelerated-video-decode --ignore-gpu-blocklist --start-fullscreen --disable-session-crashed-bubble --load-extension=/usr/local/minimeet "https://accounts.google.com/signin/v2?continue=https%3A%2F%2Fmeet.google.com"
 EOF
+# Create a copy on the Desktop that can easily be double-clicked interactively.
+mkdir -p "$DISK_MOUNT_PATH/home/pi/Desktop"
+rm -f "$DISK_MOUNT_PATH/home/pi/Desktop/JoinMeeting.desktop"
+cp "$AUTOSTART_DIR/chromium.desktop" "$DISK_MOUNT_PATH/home/pi/Desktop/JoinMeeting.desktop"
 debug 'autostart/chromium.desktop' "`cat "$DISK_MOUNT_PATH/home/pi/.config/autostart/chromium.desktop"`"
 
 # Finally, copy startup scripts.
@@ -191,6 +192,22 @@ echo
 echo "Copying scripts.."
 mkdir -p "$DISK_MOUNT_PATH/home/pi/scripts"
 cp -r "$SCRIPTS_DIR" "$DISK_MOUNT_PATH/home/pi/"
+
+# Make the main startup script run on first boot.
+echo "Setting up first-boot systemd service.."
+SYSTEMD_SERVICE_NAME='firstboot.service'
+cat <<EOF | sudo tee "$DISK_MOUNT_PATH/etc/systemd/system/$SYSTEMD_SERVICE_NAME" >/dev/null
+[Unit]
+Description=First-boot initialization script
+Wants=network-online.target multi-user.target
+After=multi-user.target
+[Service]
+Type=simple
+ExecStart=/home/pi/scripts/startup.sh
+[Install]
+WantedBy=default.target
+EOF
+sudo ln -s "$DISK_MOUNT_PATH/etc/systemd/system/$SYSTEMD_SERVICE_NAME" "$DISK_MOUNT_PATH/etc/systemd/system/default.target.wants/$SYSTEMD_SERVICE_NAME"
 
 # Final touchups.
 echo
