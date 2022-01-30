@@ -58,11 +58,6 @@ rm /etc/localtime
 echo "$TIMEZONE" > /etc/timezone
 dpkg-reconfigure -f noninteractive tzdata
 
-# # Install graphics accelaration libraries.
-# echo
-# echo "Installing graphics libraries.."
-# apt-get install --yes --quiet libgles2-mesa libgles2-mesa-dev xorg-dev
-
 # Installing other useful tools
 apt-get install --yes --quiet vim stress-ng
 
@@ -76,7 +71,7 @@ curl https://download.argon40.com/argon1.sh | bash
 
 echo
 echo "Disabling first-boot systemd service.."
-systemctl disable "firstboot.service"
+rm -f "/etc/systemd/system/default.target.wants/firstboot.service"
 
 echo
 echo "Don't forget to run argonone-config and argonone-ir"
