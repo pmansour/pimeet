@@ -9,6 +9,7 @@ fi
 # Necessary hack to re-enable WiFi in RPI-OS bullseye.
 echo "Unblocking WiFi.."
 rfkill unblock wlan
+sleep 10s
 
 echo "Updating packages.."
 apt-get update
@@ -72,10 +73,7 @@ curl https://download.argon40.com/argon1.sh | bash
 
 echo
 echo "Disabling first-boot systemd service.."
-SYSTEMD_SERVICE_NAME='firstboot.service'
-if [[ -f "/etc/systemd/system/multi-user.target.wants/$SYSTEMD_SERVICE_NAME" ]]; then
-    rm -rf "/etc/systemd/system/multi-user.target.wants/$SYSTEMD_SERVICE_NAME"
-fi
+systemctl disable "firstboot.service"
 
 echo
 echo "Don't forget to run argonone-config and argonone-ir"

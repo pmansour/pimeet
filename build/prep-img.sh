@@ -199,13 +199,15 @@ SYSTEMD_SERVICE_NAME='firstboot.service'
 cat <<EOF | sudo tee "$DISK_MOUNT_PATH/etc/systemd/system/$SYSTEMD_SERVICE_NAME" >/dev/null
 [Unit]
 Description=First-boot initialization script
+Wants=network-online.target multi-user.target
+After=multi-user.target
 [Service]
 Type=simple
 ExecStart=/home/pi/scripts/startup.sh
 [Install]
-WantedBy=multi-user.target
+WantedBy=default.target
 EOF
-sudo ln -s "$DISK_MOUNT_PATH/etc/systemd/system/$SYSTEMD_SERVICE_NAME" "$DISK_MOUNT_PATH/etc/systemd/system/multi-user.target.wants/$SYSTEMD_SERVICE_NAME"
+sudo ln -s "$DISK_MOUNT_PATH/etc/systemd/system/$SYSTEMD_SERVICE_NAME" "$DISK_MOUNT_PATH/etc/systemd/system/default.target.wants/$SYSTEMD_SERVICE_NAME"
 
 # Final touchups.
 echo
