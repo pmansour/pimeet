@@ -7,9 +7,12 @@ if [[ "`id -u`" -ne 0 ]]; then
 fi
 
 # Necessary hack to re-enable WiFi in RPI-OS bullseye.
+echo "Waiting for system to load.."
+sleep 15s
+
 echo "Unblocking WiFi.."
 rfkill unblock wlan
-sleep 10s
+sleep 20s
 
 echo "Updating packages.."
 apt-get update
