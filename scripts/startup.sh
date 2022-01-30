@@ -71,5 +71,15 @@ echo "Installing argonone tools.."
 curl https://download.argon40.com/argon1.sh | bash
 
 echo
+echo "Removing first-boot systemd service.."
+SYSTEMD_SERVICE_NAME='firstboot.service'
+if [[ -f "/etc/systemd/system/$SYSTEMD_SERVICE_NAME" ]]; then
+    rm -rf "/etc/systemd/system/$SYSTEMD_SERVICE_NAME"
+fi
+if [[ -f "/etc/systemd/system/multi-user.target.wants/$SYSTEMD_SERVICE_NAME" ]]; then
+    rm -rf "/etc/systemd/system/multi-user.target.wants/$SYSTEMD_SERVICE_NAME"
+fi
+
+echo
 echo "Don't forget to run argonone-config and argonone-ir"
 echo "Done."

@@ -194,20 +194,18 @@ mkdir -p "$DISK_MOUNT_PATH/home/pi/scripts"
 cp -r "$SCRIPTS_DIR" "$DISK_MOUNT_PATH/home/pi/"
 
 # Make the main startup script run on first boot.
-echo "Setting up first-boot script run.."
-cat <<EOF | sudo tee "$DISK_MOUNT_PATH/etc/init.d/first-boot.sh" >/dev/null
-#!/bin/bash
-
-# Stop the self-deletion if startup.sh didn't complete.
-set -e
-
-# First-boot initialization.
-. "/home/pi/scripts/startup.sh"
-
-# Delete myself
-rm "$0"
+echo "Setting up first-boot systemd service.."
+SYSTEMD_SERVICE_NAME='firstboot.service'
+cat <<EOF | sudo tee "$DISK_MOUNT_PATH/etc/systemd/system/$SYSTEMD_SERVICE_NAME" >/dev/null
+[Unit]
+Description=First-boot initialization script
+[Service]
+Type=simple
+ExecStart=/home/pi/scripts/startup.sh
+[Install]
+WantedBy=multi-user.target
 EOF
-sudo chmod +x "$DISK_MOUNT_PATH/etc/init.d/first-boot.sh"
+ln -s "$DISK_MOUNT_PATH/etc/systemd/system/$SYSTEMD_SERVICE_NAME" "$DISK_MOUNT_PATH/etc/systemd/system/multi-user.target.wants/$SYSTEMD_SERVICE_NAME"
 
 # Final touchups.
 echo
