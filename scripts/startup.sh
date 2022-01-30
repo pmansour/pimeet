@@ -39,11 +39,6 @@ apt-get install --yes --quiet realvnc-vnc-server
 systemctl enable vncserver-x11-serviced.service && \
     systemctl start vncserver-x11-serviced.service
 
-# # Configure HDMI-CEC
-# echo
-# echo "Configuring HDMI-CEC.."
-# apt-get install --yes --quiet cec-utils
-
 # Update the locale and timezone.
 echo
 echo "Updating locale and timezone.."
