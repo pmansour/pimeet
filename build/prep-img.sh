@@ -207,6 +207,7 @@ ExecStart=/home/pi/scripts/startup.sh
 [Install]
 WantedBy=default.target
 EOF
+sudo rm -f "$DISK_MOUNT_PATH/etc/systemd/system/default.target.wants/$SYSTEMD_SERVICE_NAME"
 sudo ln -s "$DISK_MOUNT_PATH/etc/systemd/system/$SYSTEMD_SERVICE_NAME" "$DISK_MOUNT_PATH/etc/systemd/system/default.target.wants/$SYSTEMD_SERVICE_NAME"
 
 # Final touchups.
