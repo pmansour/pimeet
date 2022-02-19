@@ -3,7 +3,7 @@
 # Tested on ubuntu 20.04.
 # Author: pmansour.
 
-DOWNLOAD_URL='https://downloads.raspberrypi.org/raspios_armhf/images/raspios_armhf-2021-11-08/2021-10-30-raspios-bullseye-armhf.zip'
+DOWNLOAD_URL='https://downloads.raspberrypi.org/raspios_arm64/images/raspios_arm64-2022-01-28/2022-01-28-raspios-bullseye-arm64.zip'
 TMP_ZIP_FILE=`mktemp`
 IMG_OUTPUT_DIR="$HOME/raspios-img"
 
