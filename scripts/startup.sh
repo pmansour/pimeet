@@ -10,10 +10,6 @@ fi
 echo "Waiting for system to load.."
 sleep 15s
 
-echo "Unblocking WiFi.."
-rfkill unblock wlan
-sleep 20s
-
 echo "Updating packages.."
 apt-get update
 apt-get upgrade --yes
