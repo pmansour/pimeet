@@ -170,22 +170,18 @@ debug '' "`tree "$DISK_MOUNT_PATH/usr/local/minimeet"`"
 # echo 'export PATH=$PATH:/usr/local/go/bin' | sudo tee -a "$DISK_MOUNT_PATH/home/pi/.bashrc" >/dev/null
 # debug '/usr/local/go' "`ls "$DISK_MOUNT_PATH/usr/local/go"`"
 
-# Add autostart for browser.
+# Add autostart to watch first boot progress..
 echo
-echo "Adding autostart for chromium.."
+echo "Adding autostart for first-boot script.."
 AUTOSTART_DIR="$DISK_MOUNT_PATH/home/pi/.config/autostart"
 mkdir -p "$AUTOSTART_DIR"
-cat <<EOF | sudo tee "$AUTOSTART_DIR/chromium.desktop" >/dev/null
+cat <<EOF | sudo tee "$AUTOSTART_DIR/watchfirstboot.desktop" >/dev/null
 [Desktop Entry]
 Type=Application
-Name=Chromium
-Exec=/usr/bin/chromium-browser --enable-gpu-rasterization --enable-oop-rasterization --enable-accelerated-video-decode --ignore-gpu-blocklist --start-fullscreen --disable-session-crashed-bubble --load-extension=/usr/local/minimeet "https://accounts.google.com/signin/v2?continue=https%3A%2F%2Fmeet.google.com"
+Name=FirstBoot Watcher
+Exec=journalctl -fu firstboot.service
+Terminal=true
 EOF
-# Create a copy on the Desktop that can easily be double-clicked interactively.
-mkdir -p "$DISK_MOUNT_PATH/home/pi/Desktop"
-rm -f "$DISK_MOUNT_PATH/home/pi/Desktop/JoinMeeting.desktop"
-cp "$AUTOSTART_DIR/chromium.desktop" "$DISK_MOUNT_PATH/home/pi/Desktop/JoinMeeting.desktop"
-debug 'autostart/chromium.desktop' "`cat "$DISK_MOUNT_PATH/home/pi/.config/autostart/chromium.desktop"`"
 
 # Finally, copy startup scripts.
 echo
