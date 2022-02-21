@@ -174,6 +174,7 @@ debug '' "`tree "$DISK_MOUNT_PATH/usr/local/minimeet"`"
 echo
 echo "Adding autostart for first-boot script.."
 AUTOSTART_DIR="$DISK_MOUNT_PATH/home/pi/.config/autostart"
+rm -rf "$AUTOSTART_DIR"
 mkdir -p "$AUTOSTART_DIR"
 cat <<EOF | sudo tee "$AUTOSTART_DIR/watchfirstboot.desktop" >/dev/null
 [Desktop Entry]
