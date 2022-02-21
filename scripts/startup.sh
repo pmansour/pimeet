@@ -6,7 +6,6 @@ if [[ "`id -u`" -ne 0 ]]; then
     exit 1
 fi
 
-# Necessary hack to re-enable WiFi in RPI-OS bullseye.
 echo "Waiting for system to load.."
 sleep 15s
 
@@ -49,11 +48,24 @@ rm /etc/localtime
 echo "$TIMEZONE" > /etc/timezone
 dpkg-reconfigure -f noninteractive tzdata
 
-# Installing other useful tools
+# Install other useful tools
 apt-get install --yes --quiet vim stress-ng
 
 # Remove useless stuff that's still present
 apt-get autoremove --yes --quiet
+
+# Add autostart entries
+echo
+echo "Adding autostart for choosing default audio sink.."
+AUTOSTART_DIR="/home/pi/.config/autostart"
+mkdir -p "$AUTOSTART_DIR"
+cat <<EOF | sudo tee "$AUTOSTART_DIR/default-audio-sink.desktop" >/dev/null
+[Desktop Entry]
+Type=Application
+Name=Default audio sink selector
+Exec=/home/pi/scripts/set-default-audio-sink.sh
+EOF
+# TODO: move installation of chromium autostart to here.
 
 # Install argonone tools
 echo
@@ -67,3 +79,5 @@ rm -f "/etc/systemd/system/default.target.wants/firstboot.service"
 echo
 echo "Don't forget to run argonone-config and argonone-ir"
 echo "Done."
+
+# TODO: reboot when this is finished.
