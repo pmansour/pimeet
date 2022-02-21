@@ -65,7 +65,23 @@ Type=Application
 Name=Default audio sink selector
 Exec=/home/pi/scripts/set-default-audio-sink.sh
 EOF
-# TODO: move installation of chromium autostart to here.
+
+echo "Adding autostart for chromium.."
+cat <<EOF | sudo tee "$AUTOSTART_DIR/chromium.desktop" >/dev/null
+[Desktop Entry]
+Type=Application
+Name=Chromium
+Exec=/home/pi/scripts/start-chromium.sh
+EOF
+# Create a copy on the Desktop that can easily be double-clicked interactively.
+mkdir -p "/home/pi/Desktop"
+rm -f "/home/pi/Desktop/chromium.desktop"
+cp "$AUTOSTART_DIR/chromium.desktop" "/home/pi/Desktop/chromium.desktop"
+
+# Remove the firstboot watcher since it's no longer relevant.
+echo
+echo "Removing FirstBoot watcher application.."
+rm -f "$AUTOSTART_DIR/watchfirstboot.desktop"
 
 # Install argonone tools
 echo
@@ -81,3 +97,5 @@ echo "Don't forget to run argonone-config and argonone-ir"
 echo "Done."
 
 # TODO: reboot when this is finished.
+echo "Rebooting now.."
+reboot
