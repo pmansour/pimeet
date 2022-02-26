@@ -180,8 +180,7 @@ cat <<EOF | sudo tee "$AUTOSTART_DIR/watchfirstboot.desktop" >/dev/null
 [Desktop Entry]
 Type=Application
 Name=FirstBoot Watcher
-Exec=journalctl -fu firstboot.service
-Terminal=true
+Exec=/usr/bin/lxterminal --geometry=1000x1000 -e '/usr/bin/journalctl -fu firstboot.service'
 EOF
 
 # Finally, copy startup scripts.
