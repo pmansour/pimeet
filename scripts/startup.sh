@@ -50,6 +50,7 @@ dpkg-reconfigure -f noninteractive tzdata
 
 # Install other useful tools
 apt-get install --yes --quiet vim stress-ng
+apt-get install --yes --quiet cec-utils # Needed for shutdown tool.
 
 # Remove useless stuff that's still present
 apt-get autoremove --yes --quiet
