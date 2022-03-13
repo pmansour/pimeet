@@ -212,7 +212,7 @@ sudo ln -s "$SYSTEMD_SERVICES_DIR/$FIRSTBOOT_SERVICE_NAME" "$SYSTEMD_SERVICES_DI
 echo
 echo "Setting up TV standby systemd service.."
 STANDBY_SERVICE_NAME='tv-standby.service'
-cat <<EOF | sudo tee '$SYSTEMD_SERVICES_DIR/$STANDBY_SERVICE_NAME" >/dev/null
+cat <<EOF | sudo tee "$SYSTEMD_SERVICES_DIR/$STANDBY_SERVICE_NAME" >/dev/null
 [Unit]
 Description=Puts a connected TV on standby when on system shut down.
 
