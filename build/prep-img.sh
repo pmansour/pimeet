@@ -190,9 +190,11 @@ mkdir -p "$DISK_MOUNT_PATH/home/pi/scripts"
 cp -r "$SCRIPTS_DIR" "$DISK_MOUNT_PATH/home/pi/"
 
 # Make the main startup script run on first boot.
+echo
 echo "Setting up first-boot systemd service.."
-SYSTEMD_SERVICE_NAME='firstboot.service'
-cat <<EOF | sudo tee "$DISK_MOUNT_PATH/etc/systemd/system/$SYSTEMD_SERVICE_NAME" >/dev/null
+SYSTEMD_SERVICES_DIR="$DISK_MOUNT_PATH/etc/systemd/system"
+FIRSTBOOT_SERVICE_NAME='firstboot.service'
+cat <<EOF | sudo tee "$SYSTEMD_SERVICES_DIR/$FIRSTBOOT_SERVICE_NAME" >/dev/null
 [Unit]
 Description=First-boot initialization script
 Wants=network-online.target multi-user.target
@@ -203,8 +205,28 @@ ExecStart=/home/pi/scripts/startup.sh
 [Install]
 WantedBy=default.target
 EOF
-sudo rm -f "$DISK_MOUNT_PATH/etc/systemd/system/default.target.wants/$SYSTEMD_SERVICE_NAME"
-sudo ln -s "$DISK_MOUNT_PATH/etc/systemd/system/$SYSTEMD_SERVICE_NAME" "$DISK_MOUNT_PATH/etc/systemd/system/default.target.wants/$SYSTEMD_SERVICE_NAME"
+sudo rm -f "$SYSTEMD_SERVICES_DIR/default.target.wants/$FIRSTBOOT_SERVICE_NAME"
+sudo ln -s "$SYSTEMD_SERVICES_DIR/$FIRSTBOOT_SERVICE_NAME" "$SYSTEMD_SERVICES_DIR/default.target.wants/$FIRSTBOOT_SERVICE_NAME"
+
+# Add a service for turning off the TV on shutdown.
+echo
+echo "Setting up TV standby systemd service.."
+STANDBY_SERVICE_NAME='tv-standby.service'
+cat <<EOF | sudo tee '$SYSTEMD_SERVICES_DIR/$STANDBY_SERVICE_NAME" >/dev/null
+[Unit]
+Description=Puts a connected TV on standby when on system shut down.
+
+[Service]
+Type=oneshot
+RemainAfterExit=true
+ExecStop=/home/pi/scripts/tv-standby.sh
+
+[Install]
+WantedBy=default.target
+EOF
+sudo rm -f "$SYSTEMD_SERVICES_DIR/default.target.wants/$STANDBY_SERVICE_NAME"
+sudo ln -s "$SYSTEMD_SERVICES_DIR/$STANDBY_SERVICE_NAME" "$SYSTEMD_SERVICES_DIR/default.target.wants/$STANDBY_SERVICE_NAME"
+
 
 # Final touchups.
 echo
