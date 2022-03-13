@@ -1,0 +1,11 @@
+[Unit]
+Description=First-boot initialization script
+Wants=network-online.target multi-user.target
+After=multi-user.target
+
+[Service]
+Type=simple
+ExecStart=/home/pi/scripts/startup.sh
+
+[Install]
+WantedBy=default.target
