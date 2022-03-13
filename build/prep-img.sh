@@ -12,8 +12,8 @@ LOOP_INTERFACE=`losetup -f`
 BOOT_MOUNT_PATH='/mnt/rpi/boot'
 DISK_MOUNT_PATH='/mnt/rpi/disk'
 SSH_KEY_PUB="$HOME/.ssh/id_rsa.pub"
-SCRIPTS_DIR="`dirname "$0"`/../scripts/"
-SERVICES_DIR="`dirname "$0"`/../services/"
+CURRENT_DIR="`dirname $0`"
+SCRIPTS_DIR="$CURRENT_DIR/../scripts/"
 BOOT_CONFIG_FILE="$BOOT_MOUNT_PATH/config.txt"
 
 # $1 is context, $2 is value.
@@ -198,7 +198,7 @@ cp -r "$SCRIPTS_DIR" "$DISK_MOUNT_PATH/home/pi/"
 echo
 echo "Copying services.."
 SYSTEMD_SERVICES_DIR="$DISK_MOUNT_PATH/etc/systemd/system"
-sudo cp -r "$SERVICES_DIR" "$SYSTEMD_SERVICES_DIR/"
+sudo cp -r "$CURRENT_DIR/../services/*" "$SYSTEMD_SERVICES_DIR/"
 
 # Make the main startup script run on first boot.
 echo
