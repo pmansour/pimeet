@@ -79,10 +79,14 @@ mkdir -p "/home/pi/Desktop"
 rm -f "/home/pi/Desktop/chromium.desktop"
 cp "$AUTOSTART_DIR/chromium.desktop" "/home/pi/Desktop/chromium.desktop"
 
-# Remove the firstboot watcher since it's no longer relevant.
+# Firstboot watcher service is no longer relevant after this.
 echo
 echo "Removing FirstBoot watcher application.."
 rm -f "$AUTOSTART_DIR/watchfirstboot.desktop"
+
+echo
+echo "Enabling the TV lifecycle service.."
+systemctl enable tv-lifecycle.serice
 
 # Install argonone tools
 echo
