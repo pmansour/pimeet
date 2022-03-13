@@ -1,0 +1,11 @@
+[Unit]
+Description=Turns on a connected TV on boot, and puts it on standby on system shut down.
+
+[Service]
+Type=oneshot
+RemainAfterExit=true
+ExecStart=/home/pi/scripts/tv-on.sh
+ExecStop=/home/pi/scripts/tv-standby.sh
+
+[Install]
+WantedBy=default.target

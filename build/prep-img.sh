@@ -6,12 +6,14 @@
 # Exit when any command fails.
 set -e
 
-IMG_FILE="$HOME/raspios-img/2022-01-28-raspios-bullseye-arm64.img"
+ORIGINAL_IMG_FILE="$HOME/raspios-img/2022-01-28-raspios-bullseye-arm64.img"
+WORKING_IMG_FILE="$HOME/raspios-img/raspios-working-copy.img"
 LOOP_INTERFACE=`losetup -f`
 BOOT_MOUNT_PATH='/mnt/rpi/boot'
 DISK_MOUNT_PATH='/mnt/rpi/disk'
 SSH_KEY_PUB="$HOME/.ssh/id_rsa.pub"
 SCRIPTS_DIR="`dirname "$0"`/../scripts/"
+SERVICES_DIR="`dirname "$0"`/../services/"
 BOOT_CONFIG_FILE="$BOOT_MOUNT_PATH/config.txt"
 
 # $1 is context, $2 is value.
@@ -28,8 +30,11 @@ function update_boot_config_setting() {
 }
 
 function setup_mounts {
-    echo "Mounting image '$IMG_FILE' to '$LOOP_INTERFACE'.."
-    sudo losetup -P "$LOOP_INTERFACE" "$IMG_FILE"
+    echo "Copying fresh image to working copy.."
+    cp -f "$ORIGINAL_IMG_FILE" "$WORKING_IMG_FILE"
+
+    echo "Mounting image '$WORKING_IMG_FILE' to '$LOOP_INTERFACE'.."
+    sudo losetup -P "$LOOP_INTERFACE" "$WORKING_IMG_FILE"
 
     echo "Mounting boot and disk partitions.."
     sudo mkdir -p "$BOOT_MOUNT_PATH"
@@ -183,50 +188,24 @@ Name=FirstBoot Watcher
 Exec=/usr/bin/lxterminal --geometry=1000x1000 -e '/usr/bin/journalctl -fu firstboot.service'
 EOF
 
-# Finally, copy startup scripts.
+# Copy scripts.
 echo
 echo "Copying scripts.."
 mkdir -p "$DISK_MOUNT_PATH/home/pi/scripts"
 cp -r "$SCRIPTS_DIR" "$DISK_MOUNT_PATH/home/pi/"
 
+# Copy services.
+echo
+echo "Copying services.."
+SYSTEMD_SERVICES_DIR="$DISK_MOUNT_PATH/etc/systemd/system"
+cp -r "$SERVICES_DIR" "$SYSTEMD_SERVICES_DIR/"
+
 # Make the main startup script run on first boot.
 echo
-echo "Setting up first-boot systemd service.."
-SYSTEMD_SERVICES_DIR="$DISK_MOUNT_PATH/etc/systemd/system"
+echo "Enabling firstboot service on startup.."
 FIRSTBOOT_SERVICE_NAME='firstboot.service'
-cat <<EOF | sudo tee "$SYSTEMD_SERVICES_DIR/$FIRSTBOOT_SERVICE_NAME" >/dev/null
-[Unit]
-Description=First-boot initialization script
-Wants=network-online.target multi-user.target
-After=multi-user.target
-[Service]
-Type=simple
-ExecStart=/home/pi/scripts/startup.sh
-[Install]
-WantedBy=default.target
-EOF
 sudo rm -f "$SYSTEMD_SERVICES_DIR/default.target.wants/$FIRSTBOOT_SERVICE_NAME"
 sudo ln -s "$SYSTEMD_SERVICES_DIR/$FIRSTBOOT_SERVICE_NAME" "$SYSTEMD_SERVICES_DIR/default.target.wants/$FIRSTBOOT_SERVICE_NAME"
-
-# Add a service for turning off the TV on shutdown.
-echo
-echo "Setting up TV standby systemd service.."
-STANDBY_SERVICE_NAME='tv-standby.service'
-cat <<EOF | sudo tee "$SYSTEMD_SERVICES_DIR/$STANDBY_SERVICE_NAME" >/dev/null
-[Unit]
-Description=Puts a connected TV on standby when on system shut down.
-
-[Service]
-Type=oneshot
-RemainAfterExit=true
-ExecStop=/home/pi/scripts/tv-standby.sh
-
-[Install]
-WantedBy=default.target
-EOF
-sudo rm -f "$SYSTEMD_SERVICES_DIR/default.target.wants/$STANDBY_SERVICE_NAME"
-sudo ln -s "$SYSTEMD_SERVICES_DIR/$STANDBY_SERVICE_NAME" "$SYSTEMD_SERVICES_DIR/default.target.wants/$STANDBY_SERVICE_NAME"
-
 
 # Final touchups.
 echo
