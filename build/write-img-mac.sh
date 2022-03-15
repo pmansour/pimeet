@@ -6,7 +6,7 @@
 # NOTE: EXPERIMENTAL. Use at your own risk!
 # Requires Dockerfile to have written .iso image first, eg.
 # docker run -it -v /dev:/dev -v $HOME/raspios-img/output/:/root/raspios-img/ --privileged pimeet
-# where '$HOME/raspios-img/output/' is the location of the image.
+# where '$HOME/raspios-img/output/' is the location of the image on the host.
 
 IMG_FILE="$HOME/raspios-img/output/2022-01-28-raspios-bullseye-arm64.img"
 DEVICE='/dev/rdisk5'  # Find intended device (not partition) by running `diskutil list`.
