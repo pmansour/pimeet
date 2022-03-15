@@ -12,7 +12,6 @@ RUN  apt-get update \
 
 ADD ./build /root/build
 ADD ./scripts /root/scripts
-ADD ./raspios-img /root/raspios-img/
 
  CMD   ssh-keygen && \
        ./download-img.sh && \
