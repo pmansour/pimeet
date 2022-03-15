@@ -13,6 +13,6 @@ RUN  apt-get update \
 ADD ./build /root/build
 ADD ./scripts /root/scripts
 
-CMD   ssh-keygen && \
-      ./download-img.sh && \
-      ./prep-img.sh
+CMD   ssh-keygen \
+  && ./download-img.sh \
+  && ./prep-img.sh
