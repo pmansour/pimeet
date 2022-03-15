@@ -144,7 +144,7 @@ debug 'config.txt' "`cat "$BOOT_CONFIG_FILE" | grep 'gpio-fan'`"
 echo
 echo "Copying programs.."
 GIT_TMP=`mktemp -d`
-git clone -q git@github.com:pmansour/minimeet.git "$GIT_TMP/minimeet/"
+git clone -q https://github.com/pmansour/minimeet.git "$GIT_TMP/minimeet/"
 sudo rm -rf "$DISK_MOUNT_PATH/usr/local/minimeet"
 sudo cp -r "$GIT_TMP/minimeet/mv3/." "$DISK_MOUNT_PATH/usr/local/minimeet/"
 rm -rf GIT_TMP
