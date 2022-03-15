@@ -1,7 +1,7 @@
 FROM ubuntu
 
 # To initate the build, run
-# docker build -t "pimeet"
+# `docker build -t "pimeet" .`
 # from the command line.
 
 WORKDIR /root/build
