@@ -37,6 +37,12 @@ One of the goals is to make this dead-simple to use, and hard to get wrong. As s
 
 See these [Quickstart instructions](https://docs.google.com/document/d/11bFKDRnKby4PvWUyqYbBlXx3mhg-zHjduksk8KyJA5A/view), which were printed, laminated and hung in the rooms at St George Coptic Orthodox Church, Kirkland.
 
+<p align="center">
+![Room configured with PiMeet](/docs/room-demo.png)
+<br />
+<strong>Figure A</strong>: A meeting room configured with PiMeet. Note the raspberry pi mounted directly under the TV.
+</p>
+
 Each PiMeet device has its own Google account[^1] with its own calendar, and the device will just join the next meeting on its calendar. Anybody within the organization can schedule a Google Meet[^2] meeting and invite the room’s account to it, and when they turn on the PiMeet it will just automagically join that new meeting.
 
 [^1]: For example, `mezzanine-room@{your-domain}.org`
@@ -45,8 +51,9 @@ Each PiMeet device has its own Google account[^1] with its own calendar, and the
 PiMeet achieves those goals by configuring a Raspberry PI 4B to be a 1-click meeting room device. In a nutshell, each device runs [Raspberry PI OS](https://www.raspberrypi.com/software/) (a Debian Linux fork), specially configured to run Chromium on startup with the [Minimeet extension](https://github.com/pmansour/minimeet). This extension logs into its configured Google account and joins the next available meeting on its calendar.
 
 <p align="center">
-![Creating a meeting using Google Calendar](./docs/create-meeting.png)
-<strong>Figure A</strong>: Inviting a room's account (<code>grade3-room@{your-domain}.org</code>) to a new meeting. This works for ad-hoc as well as recurring (e.g. weekly or daily) meetings.
+![Creating a meeting using Google Calendar](/docs/create-meeting.png)
+<br />
+<strong>Figure B</strong>: Inviting a room's account (<code>grade3-room@{your-domain}.org</code>) to a new meeting. This works for ad-hoc as well as recurring (e.g. weekly or daily) meetings.
 </p>
 
 ### Hardware components
