@@ -198,7 +198,7 @@ cp -r "$SCRIPTS_DIR" "$DISK_MOUNT_PATH/home/pi/"
 echo
 echo "Copying services.."
 SYSTEMD_SERVICES_DIR="$DISK_MOUNT_PATH/etc/systemd/system"
-sudo cp -r "$CURRENT_DIR/../services/*" "$SYSTEMD_SERVICES_DIR/"
+sudo cp -r $CURRENT_DIR/../services/* $SYSTEMD_SERVICES_DIR/
 
 # Make the main startup script run on first boot.
 echo
