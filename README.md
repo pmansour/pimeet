@@ -39,7 +39,7 @@ See these [Quickstart instructions](https://docs.google.com/document/d/11bFKDRnK
 
 Each PiMeet device has its own Google account[^1] with its own calendar, and the device will just join the next meeting on its calendar. Anybody within the organization can schedule a Google Meet[^2] meeting and invite the room’s account to it, and when they turn on the PiMeet it will just automagically join that new meeting.
 
-[^1]: For example, mezzanine-room@{your-domain}.org
+[^1]: For example, `mezzanine-room@{your-domain}.org`
 [^2]: The system already has experimental Zoom support (through Zoom Web), but the performance of Zoom Web is not very responsive when content is being presented. This will hopefully get better over time.
 
 PiMeet achieves those goals by configuring a Raspberry PI 4B to be a 1-click meeting room device. In a nutshell, each device runs [Raspberry PI OS](https://www.raspberrypi.com/software/) (a Debian Linux fork), specially configured to run Chromium on startup with the [Minimeet extension](https://github.com/pmansour/minimeet). This extension logs into its configured Google account and joins the next available meeting on its calendar.
