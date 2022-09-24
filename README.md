@@ -59,13 +59,15 @@ PiMeet achieves those goals by configuring a Raspberry PI 4B to be a 1-click mee
 ### Hardware components
 As of today, a typical deployment consists of the following hardware:
 - **Raspberry Pi 4B 4GB**. This model costs $55 MSRP[^3] (see [official resellers](https://www.raspberrypi.com/products/raspberry-pi-4-model-b#find-reseller)), and has powerful-enough specs[^4] to produce smooth, lag-free meetings consistently.
-- **Raspberry Pi accessories**. This includes a 32GB microSD card, a HDMI-to-HDMI cable, and a USB-C power supply. Overall, these should cost <$20 per device.
+- **Raspberry Pi accessories**. This includes a 32GB microSD card (~$6 on [Amazon](https://www.amazon.com/dp/B07NP96DX5)), a HDMI-to-HDMI cable ($5 on [Amazon](https://www.amazon.com/dp/B01H7M6YKI)), and a USB-C power supply ($10 on [Amazon](https://www.amazon.com/dp/B07TYQRXTK)).
 - **ArgonOne V.2 case**. This case costs $25 on [Amazon](https://www.amazon.com/dp/B07WP8WC3V), and has excellent cooling, ports, form-factor as well as a physical safe-shutdown power button and an IR sensor that allows use of a remote control.
 - **Logitech C920x Webcam**. This webcam costs $60 on [Amazon](https://www.amazon.com/dp/B085TFF7M1), and produces smooth 1080p video while also including a dual-microphone. In most small rooms, this mic is good enough that no external audio solution is needed.
 
+Aside from the camera, the essentials total about $100 USD at current prices. You can often get discounts when buying in bulk (especially for cables and microSD cards).
+
 In addition to these basics, some optional additions may make for a better UX in some rooms:
-- **JabraSpeak 510 bluetooth speaker**. This wireless speaker/microphone combo costs $115 on [Amazon](https://www.amazon.com/dp/B00C3XW5L4). It produces great echo-free audio and has reliable wireless connectivity through the provided dongle.
-- **Sparkfun IR remote**. This little remote-control costs $4.50 at [Sparkfun](https://www.sparkfun.com/products/14865). It allows for operating the PiMeet device wirelessly without having to press the physical on button.
+- **JabraSpeak 510 bluetooth speaker**. This wireless speaker/microphone combo costs $115 on [Amazon](https://www.amazon.com/dp/B00C3XW5L4). It produces great echo-free audio and has reliable wireless connectivity through the provided dongle. For larger rooms, consider buying multiple [Jabra 710](https://www.amazon.com/dp/B071CGH8YF)s since they can daisy-chain together.
+- **Sparkfun IR remote**. This little remote-control costs $4.50 at [Sparkfun](https://www.sparkfun.com/products/14865). It allows for operating the PiMeet device wirelessly without having to press the physical power button.
 - **Cheap bluetooth mouse**. You can buy a pack of 10 for $45 (~$4.50 each) on [Amazon](https://www.amazon.com/gp/product/B087CR8RD1). Having a dedicated mouse in each room not only allows for troubleshooting as necessary, but enables some advanced room controls such as explicitly admitting people into each meeting.
 
 [^3]: Due to the current supply-chain crisis, it may be hard to procure these at MSRP in large quantities right now. However, stock is constantly being replenished, so hopefully soon this will not be an issue in a few months.
