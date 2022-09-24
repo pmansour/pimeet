@@ -38,7 +38,7 @@ One of the goals is to make this dead-simple to use, and hard to get wrong. As s
 See these [Quickstart instructions](https://docs.google.com/document/d/11bFKDRnKby4PvWUyqYbBlXx3mhg-zHjduksk8KyJA5A/view), which were printed, laminated and hung in the rooms at St George Coptic Orthodox Church, Kirkland.
 
 <p align="center">
-![Room configured with PiMeet](/docs/room-demo.png)
+<img src="/docs/room-demo.png" alt="Room configured with PiMeet" />
 <br />
 <strong>Figure A</strong>: A meeting room configured with PiMeet. Note the raspberry pi mounted directly under the TV.
 </p>
