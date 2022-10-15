@@ -25,8 +25,4 @@ wget -q --show-progress "$DOWNLOAD_URL" -O "$TMP_DOWNLOADED_FILE"
 echo "Extracting archive to '$IMG_OUTPUT_DIR'.."
 xz -dvf "$TMP_DOWNLOADED_FILE"
 
-echo "Renaming extracted img to be the working copy."
-EXTRACTED_FILE=`basename "$TMP_DOWNLOADED_FILE" ".xz"`
-mv "$IMG_OUTPUT_DIR/$EXTRACTED_FILE" "$IMG_OUTPUT_DIR/raspios-working-copy.img"
-
 echo "Done."
