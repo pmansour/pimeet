@@ -123,12 +123,6 @@ sudo sed -i "s/127.0.1.1.*$/127.0.1.1\t$HOSTNAME/g" "$DISK_MOUNT_PATH/etc/hosts"
 debug '/etc/hostname' "`cat "$DISK_MOUNT_PATH/etc/hostname"`"
 debug '/etc/hosts' "`cat "$DISK_MOUNT_PATH/etc/hosts"`"
 
-# Set fixed screen resolution, per https://pimylifeup.com/raspberry-pi-screen-resolution/
-echo
-echo "Configuring screen resolution.."
-update_boot_config_setting hdmi_group 1 # Group 1 (CEA) is for TVs, 2 (DMT) is for monitors.
-update_boot_config_setting hdmi_mode 16 # CEA Mode 16 is 1920x1080 resolution at 60hz 16:9.
-
 # Enable fan temperature control
 echo
 echo "Configuring fan at 60° on GPIO pin 14.."
