@@ -1,6 +1,6 @@
 #!/bin/bash
 
-IMG_FILE="$HOME/raspios-img/2022-01-28-raspios-bullseye-arm64.img"
+IMG_FILE="$HOME/raspios-img/raspios-working-copy.img"
 LOOP_INTERFACE=`losetup -f`
 BOOT_MOUNT_PATH='/mnt/rpi/boot'
 DISK_MOUNT_PATH='/mnt/rpi/disk'
