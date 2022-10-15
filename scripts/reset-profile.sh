@@ -9,7 +9,7 @@
 set -e
 
 if [[ "`id -u`" -ne 0 ]]; then
-    echo "This script must be run as root. Try running 'sudo $1'." >&2
+    echo "This script must be run as root. Try running 'sudo $0'." >&2
     exit 1
 fi
 
@@ -21,7 +21,7 @@ function debug {
     echo -e "\e[3m$2\e[0m" >&2
 }
 
-if [ -z "$2" ]; then
+if [ -z "$1" ]; then
     # Interactive mode
 
     read -p "Enter new password for 'pi' user: " PI_PASSWORD
@@ -37,7 +37,7 @@ if [ -z "$2" ]; then
     read -p "Enter Google password: " GOOGLE_ACCOUNT_PASSWORD
 else
     # Config mode -- first argument should be the config file.
-    source "$2"
+    source "$1"
 
     if [ -z "$HASHED_PI_PASSWORD" ] || [ -z "$HOSTNAME" ] || [ -z "$GOOGLE_ACCOUNT_EMAIL" ] || [ -z "$GOOGLE_ACCOUNT_PASSWORD" ]; then
         echo "One or more configs are missing from the config file. Please ensure that the following variables are set: HASHED_PI_PASSWORD, HOSTNAME, GOOGLE_ACCOUNT_EMAIL, GOOGLE_ACCOUNT_PASSWORD." >&2

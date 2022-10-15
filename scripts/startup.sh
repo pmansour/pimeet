@@ -2,7 +2,7 @@
 # Script to be run interactively on first login.
 
 if [[ "`id -u`" -ne 0 ]]; then
-    echo "This script must be run as root. Try running 'sudo $1'."
+    echo "This script must be run as root. Try running 'sudo $0'."
     exit 1
 fi
 
@@ -49,7 +49,7 @@ echo "$TIMEZONE" > /etc/timezone
 dpkg-reconfigure -f noninteractive tzdata
 
 # Install other useful tools
-apt-get install --yes --quiet vim stress-ng
+apt-get install --yes --quiet vim stress-ng whois tree
 apt-get install --yes --quiet cec-utils # Needed by TV standby service.
 
 # Remove useless stuff that's still present
