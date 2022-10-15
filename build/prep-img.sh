@@ -6,7 +6,7 @@
 # Exit when any command fails.
 set -e
 
-ORIGINAL_IMG_FILE="$HOME/raspios-img/2022-01-28-raspios-bullseye-arm64.img"
+ORIGINAL_IMG_FILE="$HOME/raspios-img/2022-09-22-raspios-bullseye-arm64.img"
 WORKING_IMG_FILE="$HOME/raspios-img/raspios-working-copy.img"
 LOOP_INTERFACE=`losetup -f`
 BOOT_MOUNT_PATH='/mnt/rpi/boot'
