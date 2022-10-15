@@ -1,11 +1,13 @@
 #!/bin/bash
-# Prerequisites: wget, unzip.
+# Prerequisites: wget, xz (part of xz-utils).
 # Tested on ubuntu 20.04.
 # Author: pmansour.
 
-DOWNLOAD_URL='https://downloads.raspberrypi.org/raspios_arm64/images/raspios_arm64-2022-01-28/2022-01-28-raspios-bullseye-arm64.zip'
-TMP_ZIP_FILE=`mktemp`
+DOWNLOAD_URL='https://downloads.raspberrypi.org/raspios_arm64/images/raspios_arm64-2022-09-26/2022-09-22-raspios-bullseye-arm64.img.xz'
 IMG_OUTPUT_DIR="$HOME/raspios-img"
+TMP_DOWNLOADED_FILE="$IMG_OUTPUT_DIR/$(basename "$DOWNLOAD_URL")"
+
+set -e
 
 if [[ -d "$IMG_OUTPUT_DIR" ]]; then
     read -p "Directory '$IMG_OUTPUT_DIR' already exists. Overwrite? [y/N] " -n 1 -r
@@ -14,14 +16,17 @@ if [[ -d "$IMG_OUTPUT_DIR" ]]; then
         echo "Aborted."
         exit 1
     fi
-    echo "Removing directory '$IMG_OUTPUT_DIR'.."
-    rm -rf "$IMG_OUTPUT_DIR"
 fi
 
-echo "Downloading RPI OS image to temp file.."
-wget -q --show-progress "$DOWNLOAD_URL" -O "$TMP_ZIP_FILE"
-echo "Extracting archive to '$IMG_OUTPUT_DIR'.."
 mkdir -p "$IMG_OUTPUT_DIR"
-unzip -d "$IMG_OUTPUT_DIR" "$TMP_ZIP_FILE"
-rm "$TMP_ZIP_FILE"
+
+echo "Downloading RPI OS image to temp file.."
+wget -q --show-progress "$DOWNLOAD_URL" -O "$TMP_DOWNLOADED_FILE"
+echo "Extracting archive to '$IMG_OUTPUT_DIR'.."
+xz -dvf "$TMP_DOWNLOADED_FILE"
+
+echo "Renaming extracted img to be the working copy."
+EXTRACTED_FILE=`basename "$TMP_DOWNLOADED_FILE" ".xz"`
+mv "$IMG_OUTPUT_DIR/$EXTRACTED_FILE" "$IMG_OUTPUT_DIR/raspios-working-copy.img"
+
 echo "Done."
