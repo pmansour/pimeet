@@ -88,17 +88,28 @@ echo
 echo "Enabling the TV lifecycle service.."
 systemctl enable tv-lifecycle.serice
 
-# Install argonone tools
+# Install ArgonOne tools
 echo
-echo "Installing argonone tools.."
+echo "Installing ArgonOne tools.."
 curl https://download.argon40.com/argon1.sh | bash
+
+# Configure ArgonOne fan speeds
+cat <<EOF | sudo tee "/etc/argononed.conf" >/dev/null
+#
+# Argon One Fan Speed Configuration
+#
+# Min Temp=Fan Speed
+55=25
+60=75
+65=100
+EOF
 
 echo
 echo "Disabling first-boot systemd service.."
 rm -f "/etc/systemd/system/default.target.wants/firstboot.service"
 
 echo
-echo "Don't forget to run argonone-config and argonone-ir"
+echo "Don't forget to run argonone-ir"
 echo "Done."
 
 # TODO: reboot when this is finished.
