@@ -1,0 +1,6 @@
+# table samsung, type: nec
+0x70760  KEY_UP
+0x70762  KEY_TAB
+0x70761  KEY_DOWN
+0x70765  KEY_LEFT
+0x70768  KEY_ENTER
